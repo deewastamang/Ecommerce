@@ -19,16 +19,18 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    if(session) {
-      dispatch(addUser({
-        name: session?.user?.name,
-        email: session?.user?.email,
-        image: session?.user?.image,
-      }));
+    if (session) {
+      dispatch(
+        addUser({
+          name: session?.user?.name,
+          email: session?.user?.email,
+          image: session?.user?.image,
+        })
+      );
     } else {
-      dispatch(deleteUser())
+      dispatch(deleteUser());
     }
-  },[session, dispatch]);
+  }, [session, dispatch]);
 
   return (
     <main className="bg-bodyColor min-h-20 sticky top-0 z-50">
@@ -65,7 +67,10 @@ const Header = () => {
             </div>
           )}
           {/* cart button */}
-          <Link href="/cart" className='bg-black hover:bg-slate-950  rounded-full text-slate-100 hover:text-white hidden md:flex items-center justify-center gap-x-1.5 px-1 lg:px-5 cursor-pointer border border-black hover:border-orange-600 duration-200 relative' >
+          <Link
+            href="/cart"
+            className="bg-black hover:bg-slate-950  rounded-full text-slate-100 hover:text-white hidden md:flex items-center justify-center gap-x-1.5 px-1 lg:px-5 cursor-pointer border border-black hover:border-orange-600 duration-200 relative"
+          >
             <Cart />
           </Link>
           {/* user profile control */}
