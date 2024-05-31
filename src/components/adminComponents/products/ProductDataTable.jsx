@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import CreateProductModal from "./CreateProductModal";
 
-export default function DataTable({ columns, data }) {
+export default function DataTable({ columns, data, refetch }) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -50,7 +50,7 @@ export default function DataTable({ columns, data }) {
           }
           className="max-w-xs rounded"
         />
-        <CreateProductModal />
+        <CreateProductModal refetch={refetch} />
       </div>
       <div className="rounded-md border">
         <Table>

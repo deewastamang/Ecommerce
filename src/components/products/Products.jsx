@@ -4,10 +4,13 @@ import Container from "../header/Container";
 import { useGetProductsQuery } from "@/features/productSlice/product.slice";
 import ProductData from "./ProductData";
 import Loading from "@/app/loading";
-import React from "react";
+import React, {useEffect} from "react";
 
 const Products = () => {
-  const { data: products, error, isLoading } = useGetProductsQuery();
+  const { data: products, error, isLoading, refetch } = useGetProductsQuery();
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   if (isLoading) return <Loading />;
   if (error) return <div>Error...</div>;
   return (

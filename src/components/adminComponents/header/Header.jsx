@@ -41,7 +41,7 @@ const header = () => {
     },
   ];
   return (
-    <aside className="h-full w-full ">
+    <aside className="h-full w-full">
       <p className="flex justify-center text-xl text-orange-600 select-none py-1 gap-x-1">
         <MdOutlineAdminPanelSettings className="text-3xl" />
         Shop Admin Panel

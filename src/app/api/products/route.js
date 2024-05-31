@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { ProductModel } from "@/lib/models/productModel";
 import { connectToDb } from "@/lib/dbConnection";
-import { revalidatePath } from "next/cache";
 
-export const GET = async (req) => {
+export const GET = async () => {
   try {
     // in case of find product by search parameter
     // const url = new URL(req.url);
@@ -42,7 +41,6 @@ export const POST = async (req) => {
     const reqBody = await req.json();
     const newProduct = new ProductModel(reqBody)
     await newProduct.save();
-    revalidatePath('/admin/products', 'layout');
     return NextResponse.json({
       msg: "Product created successfully",
       success: true,

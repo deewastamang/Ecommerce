@@ -17,7 +17,7 @@ import * as Yup from "yup";
 import { useCreateProductMutation } from "@/features/productSlice/product.slice";
 import { toast } from "sonner";
 
-const CreateProductModal = () => {
+const CreateProductModal = ({refetch}) => {
     const [createProduct, {isLoading, isSuccess, isError}] = useCreateProductMutation();
     const initialValues = {
         title: '',
@@ -51,10 +51,10 @@ const CreateProductModal = () => {
             onSubmit={
                 async (values, {setSubmitting}) => {
                     try {
-                        console.log('form values are ', values)
                         const res = await createProduct(values);
                         if(res.data.success) {
                             toast.success("Product created successfully")
+                            refetch();
                             setSubmitting(false);
                         } else {
                             throw new Error("Post method failed")
@@ -114,7 +114,7 @@ const CreateProductModal = () => {
 
               <div className="flex justify-center py-4 items-center gap-x-2">
                 <SheetClose className="" asChild>
-                  <Button type="submit" disabled={isSubmitting} variant="primary">
+                  <Button type="submit" disabled={isSubmitting || isLoading} variant="primary">
                     Save changes
                   </Button>
                 </SheetClose>

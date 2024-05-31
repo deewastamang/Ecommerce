@@ -4,18 +4,32 @@ import { useGetProductsQuery } from "@/features/productSlice/product.slice";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Loading from "@/app/loading";
+import GlobalError from "next/dist/client/components/error-boundary";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const page = () => {
-  const { data: products, error, isLoading } = useGetProductsQuery();
+  const { data: products, error, isLoading, refetch } = useGetProductsQuery();
   const [expandedRows, setExpandedRows] = useState({});
-  console.log("products in table ", products);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   const toggleExpand = (rowId) => {
     setExpandedRows((prev) => ({
       ...prev,
       [rowId]: !prev[rowId],
     }));
   };
+
   const columns = [
     {
       id: "select",
@@ -173,14 +187,42 @@ const page = () => {
         );
       },
     },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const payment = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className='bg-white'>
+              <DropdownMenuItem className='text-green-600'>Edit</DropdownMenuItem>
+              <DropdownMenuItem className='text-red-600'>Delete</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
   ];
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <GlobalError />;
+  }
   return (
     <div>
       <p className="text-2xl font-semibold py-4 mx-4 text-orange-600">
         Products
       </p>
       <div className="w-5/6 mx-auto">
-        <DataTable data={products?.data} columns={columns} />
+        <DataTable data={products?.data} columns={columns} refetch={refetch} />
       </div>
     </div>
   );
