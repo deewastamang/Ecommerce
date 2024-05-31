@@ -20,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Link from "next/link";
+import CreateProductModal from "./CreateProductModal";
 
 export default function DataTable({ columns, data }) {
   const [sorting, setSorting] = React.useState([]);
@@ -50,9 +50,7 @@ export default function DataTable({ columns, data }) {
           }
           className="max-w-xs rounded"
         />
-          <button className="text-sm bg-black text-white rounded px-4 py-2 whitespace-nowrap hover:bg-orange-600 duration-200">
-            Add a new product
-          </button>
+        <CreateProductModal />
       </div>
       <div className="rounded-md border">
         <Table>
@@ -80,6 +78,7 @@ export default function DataTable({ columns, data }) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className='hover:bg-slate-900/20 data-[state=selected]:bg-slate-900/30 text-center'
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -108,7 +107,7 @@ export default function DataTable({ columns, data }) {
           <button
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="border border-black text-xs hover:bg-orange-600 duration-200 rounded px-2 py-1.5 cursor-pointer"
+            className="bg-black text-slate-100 text-xs hover:bg-orange-600 duration-200 rounded px-3 py-2 cursor-pointer"
           >
             Previous
           </button>
@@ -121,7 +120,7 @@ export default function DataTable({ columns, data }) {
           <button
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="border border-black  text-xs hover:bg-orange-600 duration-200 rounded px-2 py-1.5 cursor-pointer"
+            className="bg-black text-slate-100  text-xs hover:bg-orange-600 duration-200 rounded px-3 py-2 cursor-pointer"
           >
             Next
           </button>

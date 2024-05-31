@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ProductModel } from "@/lib/models/productModel";
 import { connectToDb } from "@/lib/dbConnection";
+import { revalidatePath } from "next/cache";
 
 export const GET = async (req) => {
   try {
@@ -21,6 +22,31 @@ export const GET = async (req) => {
       msg: "Product fetched successfully",
       success: true,
       data: products,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        msg: `product loading error: ${error.message}`,
+      },
+      {
+        status: 400,
+      }
+    );
+  }
+};
+
+export const POST = async (req) => {
+  try {
+    await connectToDb();
+    const reqBody = await req.json();
+    const newProduct = new ProductModel(reqBody)
+    await newProduct.save();
+    revalidatePath('/admin/products', 'layout');
+    return NextResponse.json({
+      msg: "Product created successfully",
+      success: true,
+      data: reqBody,
     });
   } catch (error) {
     return NextResponse.json(

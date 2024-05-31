@@ -2,14 +2,14 @@
 import DataTable from "@/components/adminComponents/products/ProductDataTable";
 import { useGetProductsQuery } from "@/features/productSlice/product.slice";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 
 const page = () => {
-  const products = useGetProductsQuery();
+  const { data: products, error, isLoading } = useGetProductsQuery();
   const [expandedRows, setExpandedRows] = useState({});
-
+  console.log("products in table ", products);
   const toggleExpand = (rowId) => {
     setExpandedRows((prev) => ({
       ...prev,
@@ -50,7 +50,7 @@ const page = () => {
             Title
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        )
+        );
       },
     },
     {
@@ -64,9 +64,8 @@ const page = () => {
             Price(in NPR)
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        )
+        );
       },
-   
     },
     {
       accessorKey: "oldPrice",
@@ -79,7 +78,7 @@ const page = () => {
             Old Price(in NPR)
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        )
+        );
       },
     },
     {
@@ -93,7 +92,7 @@ const page = () => {
             Category
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        )
+        );
       },
     },
     {
@@ -107,7 +106,7 @@ const page = () => {
             Rating
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        )
+        );
       },
     },
     {
@@ -121,16 +120,12 @@ const page = () => {
             New
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        )
+        );
       },
-      cell: ({row, getValue}) => {
+      cell: ({ row, getValue }) => {
         const isNew = getValue();
-        return (
-          <>
-            {isNew ? 'New' : 'Old'}
-          </>
-        )
-      }
+        return <>{isNew ? "New" : "Old"}</>;
+      },
     },
     {
       accessorKey: "stock",
@@ -143,44 +138,49 @@ const page = () => {
             Stock
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-        )
+        );
       },
-      cell: ({row, getValue}) => {
+      cell: ({ row, getValue }) => {
         const inStock = getValue();
-        return (
-          <>
-            {inStock > 0 ? inStock : 'N/A'}
-          </>
-        )
-      }
+        return <>{inStock > 0 ? inStock : "N/A"}</>;
+      },
     },
 
     {
       accessorKey: "description",
       header: "Description",
-      cell: ({row, getValue}) => {
+      cell: ({ row, getValue }) => {
         const description = getValue();
         const isExpanded = expandedRows[row.id];
         const shouldTruncate = description.length > 100 && !isExpanded;
 
         return (
           <>
-            <span>{shouldTruncate ? `${description.substring(0, 34)}...` : description}</span>
+            <span>
+              {shouldTruncate
+                ? `${description.substring(0, 34)}...`
+                : description}
+            </span>
             {description.length > 100 && (
-              <button className="text-slate-500 ml-2" onClick={() => toggleExpand(row.id)}>
-                {isExpanded ? 'See less' : 'See more'}
+              <button
+                className="text-slate-500 ml-2"
+                onClick={() => toggleExpand(row.id)}
+              >
+                {isExpanded ? "See less" : "See more"}
               </button>
             )}
           </>
         );
-      }
+      },
     },
   ];
   return (
     <div>
-      <p className="text-2xl font-semibold py-4 mx-4 text-orange-600">Products</p>
+      <p className="text-2xl font-semibold py-4 mx-4 text-orange-600">
+        Products
+      </p>
       <div className="w-5/6 mx-auto">
-        <DataTable data={products?.data?.data} columns={columns} />
+        <DataTable data={products?.data} columns={columns} />
       </div>
     </div>
   );

@@ -7,14 +7,23 @@ export const productSlice = createApi({
     endpoints: (builder) => ({
         getProducts: builder.query({
             query: () => '/products',
+            keepUnusedDataFor: 0,
         }),
         // getProduct: builder.query({  //using search query parameter
         //     query: (searchParams) => `/product/?_id=${searchParams._id}`
         // }),
         getSingleProduct: builder.query({
-            query: (_id) => `/products/${_id}`
-        })
+            query: (_id) => `/products/${_id}`,
+            keepUnusedDataFor: 0,
+        }),
+        createProduct: builder.mutation({
+            query: (newProduct) => ({
+                url: '/products',
+                method: 'POST',
+                body: newProduct,
+            }),
+        }),
     }),
 });
 
-export const {useGetProductsQuery, useGetSingleProductQuery} = productSlice;
+export const {useGetProductsQuery, useGetSingleProductQuery, useCreateProductMutation} = productSlice;
