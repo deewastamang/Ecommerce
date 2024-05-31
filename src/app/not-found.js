@@ -25,7 +25,7 @@ const NotFound = () => {
                 Try searching again, or return to dashboard.
               </p>
               <a
-                href="/"
+                href="/admin"
                 className="mt-6 inline-block rounded bg-orange-600 hover:bg-orange-500 px-5 py-3 text-sm font-medium text-white focus:outline-none focus:ring"
               >
                 Go Back To Dashboard
