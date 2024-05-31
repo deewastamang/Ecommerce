@@ -1,13 +1,12 @@
 import "./globals.css";
-import Header from "@/components/header/Header";
+import GeneralLayout from "@/components/layout/GeneralLayout";
+import ReduxProvider from "@/components/reduxProvider/Provider";
 import SessionProviderWrapper from "@/components/sessionProviderWrapper/SessionProvider";
+import { Toaster } from "sonner";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
-import { Toaster } from "sonner";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ReduxProvider from "@/components/reduxProvider/Provider";
-import Footer from "@/components/footer/Footer";
 
 export const metadata = {
   title: "Deewas Shop",
@@ -22,9 +21,9 @@ export default async function RootLayout({ children }) {
         <ReduxProvider>
           <SessionProviderWrapper session={session}>
             <Toaster position="bottom-left" />
-            <Header />
-            {children}
-            <Footer />
+            <GeneralLayout>
+              {children}
+            </GeneralLayout>
           </SessionProviderWrapper>
         </ReduxProvider>
       </body>

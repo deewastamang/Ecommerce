@@ -1,6 +1,10 @@
+"use client"
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const NotFound = () => {
+  const pathname = usePathname();
+  const isAdmin = pathname.startsWith("/admin");
   return (
     <div className="flex min-h-[85dvh] flex-col">
       <img
@@ -15,16 +19,31 @@ const NotFound = () => {
             We can't find that page.
           </h1>
 
-          <p className="mt-4 text-gray-500">
-            Try searching again, or return home to start from the beginning.
-          </p>
-
-          <a
-            href="/"
-            className="mt-6 inline-block rounded bg-orange-600 hover:bg-orange-500 px-5 py-3 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring"
-          >
-            Go Back Home
-          </a>
+          {isAdmin ? (
+            <>
+              <p className="mt-4 text-gray-500">
+                Try searching again, or return to dashboard.
+              </p>
+              <a
+                href="/"
+                className="mt-6 inline-block rounded bg-orange-600 hover:bg-orange-500 px-5 py-3 text-sm font-medium text-white focus:outline-none focus:ring"
+              >
+                Go Back To Dashboard
+              </a>
+            </>
+          ) : (
+            <>
+              <p className="mt-4 text-gray-500">
+                Try searching again, or return home to start from the beginning.
+              </p>
+              <a
+                href="/"
+                className="mt-6 inline-block rounded bg-orange-600 hover:bg-orange-500 px-5 py-3 text-sm font-medium text-white focus:outline-none focus:ring"
+              >
+                Go Back Home
+              </a>
+            </>
+          )}
         </div>
       </div>
     </div>

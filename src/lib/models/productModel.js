@@ -30,6 +30,9 @@ const productSchema = new mongoose.Schema({
     },
     quantity: {
         type: Number,
+    },
+    stock: {
+        type: Number,
     }
 })
 
