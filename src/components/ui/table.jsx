@@ -20,7 +20,7 @@ TableHeader.displayName = "TableHeader"
 const TableBody = React.forwardRef(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
-    className={cn("[&_tr:last-child]:border-0", className)}
+    className={cn("bg-white", className)}
     {...props} />
 ))
 TableBody.displayName = "TableBody"
@@ -48,7 +48,7 @@ const TableHead = React.forwardRef(({ className, ...props }, ref) => (
   <th
     ref={ref}
     className={cn(
-      "h-12 px-4 text-left bg-black align-middle font-medium text-white [&:has([role=checkbox])]:pr-0",
+      "h-12 px-4 bg-black align-middle font-semibold text-white [&:has([role=checkbox])]:pr-0",
       className
     )}
     {...props} />

@@ -2,7 +2,7 @@
 import DataTable from "@/components/adminComponents/products/ProductDataTable";
 import { useGetProductsQuery } from "@/features/productSlice/product.slice";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, Delete, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 import Loading from "@/app/loading";
@@ -13,22 +13,25 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+import DeleteProductDialog from "@/components/adminComponents/products/DeleteProductDialog";
+
 
 const page = () => {
   const { data: products, error, isLoading, refetch } = useGetProductsQuery();
-  const [expandedRows, setExpandedRows] = useState({});
 
   useEffect(() => {
     refetch();
   }, [refetch]);
 
-  const toggleExpand = (rowId) => {
-    setExpandedRows((prev) => ({
-      ...prev,
-      [rowId]: !prev[rowId],
-    }));
-  };
 
   const columns = [
     {
@@ -66,6 +69,10 @@ const page = () => {
           </Button>
         );
       },
+      cell: ({ row, getValue }) => {
+        const title = getValue();
+        return <span className="font-medium text-blue-400">{title}</span>;
+      },
     },
     {
       accessorKey: "price",
@@ -75,10 +82,14 @@ const page = () => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Price(in NPR)
+            Price
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
+      },
+      cell: ({ row, getValue }) => {
+        const price = getValue();
+        return <><span className="font-medium">NPR</span> {price.toFixed(2)}</>;
       },
     },
     {
@@ -89,10 +100,14 @@ const page = () => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Old Price(in NPR)
+            Old Price
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
+      },
+      cell: ({ row, getValue }) => {
+        const price = getValue();
+        return <><span className="font-medium">NPR</span> {price.toFixed(2)}</>;
       },
     },
     {
@@ -107,6 +122,18 @@ const page = () => {
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
+      },
+      cell: ({ row, getValue }) => {
+        const category = getValue();
+        return <>
+          {
+            category === 'women' 
+            ? <span className="text-pink-400">Women</span>
+            : category === 'men' 
+            ? <span className="text-blue-400">Men</span>
+            : <span className="text-orange-400">{category}</span>
+          }
+        </>;
       },
     },
     {
@@ -138,7 +165,13 @@ const page = () => {
       },
       cell: ({ row, getValue }) => {
         const isNew = getValue();
-        return <>{isNew ? "New" : "Old"}</>;
+        return <>
+        {
+          isNew 
+          ? <span className="bg-green-100 text-green-600 font-medium rounded-full px-3 py-1">New</span>
+          : <span className="bg-orange-100 text-orange-600 font-medium  rounded-full px-3 py-1">Old</span>
+          }
+          </>;
       },
     },
     {
@@ -156,7 +189,10 @@ const page = () => {
       },
       cell: ({ row, getValue }) => {
         const inStock = getValue();
-        return <>{inStock > 0 ? inStock : "N/A"}</>;
+        return <>{inStock > 0 
+          ? <span className="text-green-400">{inStock}</span> 
+          : <span className="text-red-400">N/A</span>
+          }</>;
       },
     },
 
@@ -165,33 +201,27 @@ const page = () => {
       header: "Description",
       cell: ({ row, getValue }) => {
         const description = getValue();
-        const isExpanded = expandedRows[row.id];
-        const shouldTruncate = description.length > 100 && !isExpanded;
-
         return (
           <>
-            <span>
-              {shouldTruncate
-                ? `${description.substring(0, 34)}...`
-                : description}
-            </span>
-            {description.length > 100 && (
-              <button
-                className="text-slate-500 ml-2"
-                onClick={() => toggleExpand(row.id)}
-              >
-                {isExpanded ? "See less" : "See more"}
-              </button>
-            )}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>{description.substring(0,10)}...</TooltipTrigger>
+                <TooltipContent className="w-48 bg-white rounded">
+                  <p >{description}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </>
         );
       },
+      enableResizing: false,
+      size: 800,
     },
     {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const payment = row.original;
+        const singleRowData = row.original;
 
         return (
           <DropdownMenu>
@@ -201,9 +231,13 @@ const page = () => {
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className='bg-white'>
-              <DropdownMenuItem className='text-green-600'>Edit</DropdownMenuItem>
-              <DropdownMenuItem className='text-red-600'>Delete</DropdownMenuItem>
+            <DropdownMenuContent align="end" className="bg-white rounded">
+              <DropdownMenuItem className="text-green-600">
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600">
+              <DeleteProductDialog />
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -217,11 +251,11 @@ const page = () => {
     return <GlobalError />;
   }
   return (
-    <div>
+    <div className="">
       <p className="text-2xl font-semibold py-4 mx-4 text-orange-600">
         Products
       </p>
-      <div className="w-5/6 mx-auto">
+      <div className="xl:w-5/6 mx-auto my-6">
         <DataTable data={products?.data} columns={columns} refetch={refetch} />
       </div>
     </div>

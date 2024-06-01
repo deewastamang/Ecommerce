@@ -37,6 +37,12 @@ export default function DataTable({ columns, data, refetch }) {
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onRowSelectionChange: setRowSelection,
+    columnResizeMode: 'onChange',
+    defaultColumn: {
+      size: 200, //starting column size
+      minSize: 50, //enforced during column resizing
+      maxSize: 500, //enforced during column resizing
+    },
   });
 
   return (
@@ -52,14 +58,14 @@ export default function DataTable({ columns, data, refetch }) {
         />
         <CreateProductModal refetch={refetch} />
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-[5px] overflow-hidden">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className='text-start first:text-center'>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -78,7 +84,7 @@ export default function DataTable({ columns, data, refetch }) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className='hover:bg-slate-900/20 data-[state=selected]:bg-slate-900/30 text-center'
+                  className='hover:bg-slate-900/20 data-[state=selected]:bg-slate-900/30'
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -103,7 +109,7 @@ export default function DataTable({ columns, data, refetch }) {
           </TableBody>
         </Table>
 
-        <div className="flex items-center justify-between p-4">
+        <div className="flex items-center justify-between p-4 bg-white">
           <button
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}

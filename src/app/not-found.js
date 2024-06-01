@@ -1,10 +1,11 @@
 "use client"
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
 const NotFound = () => {
   const pathname = usePathname();
-  const isAdmin = pathname.startsWith("/admin");
+  const router = useRouter();
+  const isAdminPages = pathname.startsWith("/admin");
   return (
     <div className="flex min-h-[85dvh] flex-col">
       <img
@@ -19,29 +20,29 @@ const NotFound = () => {
             We can't find that page.
           </h1>
 
-          {isAdmin ? (
+          {isAdminPages ? (
             <>
               <p className="mt-4 text-gray-500">
                 Try searching again, or return to dashboard.
               </p>
-              <a
-                href="/admin"
+              <button
+                onClick={() => router.back()}
                 className="mt-6 inline-block rounded bg-orange-600 hover:bg-orange-500 px-5 py-3 text-sm font-medium text-white focus:outline-none focus:ring"
               >
-                Go Back To Dashboard
-              </a>
+                Go Back
+              </button>
             </>
           ) : (
             <>
               <p className="mt-4 text-gray-500">
                 Try searching again, or return home to start from the beginning.
               </p>
-              <a
-                href="/"
+              <button
+                onClick={() => router.back()}
                 className="mt-6 inline-block rounded bg-orange-600 hover:bg-orange-500 px-5 py-3 text-sm font-medium text-white focus:outline-none focus:ring"
               >
-                Go Back Home
-              </a>
+                Go Back
+              </button>
             </>
           )}
         </div>
