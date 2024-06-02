@@ -47,7 +47,7 @@ export default function DataTable({ columns, data, refetch }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between py-1">
+      <div className="flex items-center justify-between py-1.5">
         <Input
           placeholder="Search for a product..."
           value={table.getColumn("title")?.getFilterValue() ?? ""}

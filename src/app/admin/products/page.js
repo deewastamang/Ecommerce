@@ -23,15 +23,26 @@ import {
 } from "@/components/ui/tooltip";
 
 import DeleteProductDialog from "@/components/adminComponents/products/DeleteProductDialog";
+import UpdateProductModal from "@/components/adminComponents/products/UpdateProductModal";
 
-
-const page = () => {
+const AdminProductsPage = () => {
   const { data: products, error, isLoading, refetch } = useGetProductsQuery();
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const handleDeleteRowClick = (product) => {
+    setSelectedRow(product);
+    setDeleteModalOpen(true);
+  };
+  const handleEditRowClick = (product) => {
+    setSelectedRow(product);
+    setEditModalOpen(true);
+  };
 
   useEffect(() => {
     refetch();
   }, [refetch]);
-
 
   const columns = [
     {
@@ -89,7 +100,11 @@ const page = () => {
       },
       cell: ({ row, getValue }) => {
         const price = getValue();
-        return <><span className="font-medium">NPR</span> {price.toFixed(2)}</>;
+        return (
+          <>
+            <span className="font-medium">NPR</span> {price.toFixed(2)}
+          </>
+        );
       },
     },
     {
@@ -107,7 +122,11 @@ const page = () => {
       },
       cell: ({ row, getValue }) => {
         const price = getValue();
-        return <><span className="font-medium">NPR</span> {price.toFixed(2)}</>;
+        return (
+          <>
+            <span className="font-medium">NPR</span> {price.toFixed(2)}
+          </>
+        );
       },
     },
     {
@@ -125,15 +144,17 @@ const page = () => {
       },
       cell: ({ row, getValue }) => {
         const category = getValue();
-        return <>
-          {
-            category === 'women' 
-            ? <span className="text-pink-400">Women</span>
-            : category === 'men' 
-            ? <span className="text-blue-400">Men</span>
-            : <span className="text-orange-400">{category}</span>
-          }
-        </>;
+        return (
+          <>
+            {category === "women" ? (
+              <span className="text-pink-400">Women</span>
+            ) : category === "men" ? (
+              <span className="text-blue-400">Men</span>
+            ) : (
+              <span className="text-orange-400">{category}</span>
+            )}
+          </>
+        );
       },
     },
     {
@@ -165,13 +186,19 @@ const page = () => {
       },
       cell: ({ row, getValue }) => {
         const isNew = getValue();
-        return <>
-        {
-          isNew 
-          ? <span className="bg-green-100 text-green-600 font-medium rounded-full px-3 py-1">New</span>
-          : <span className="bg-orange-100 text-orange-600 font-medium  rounded-full px-3 py-1">Old</span>
-          }
-          </>;
+        return (
+          <>
+            {isNew ? (
+              <span className="bg-green-100 text-green-600 font-medium rounded-full px-3 py-1">
+                New
+              </span>
+            ) : (
+              <span className="bg-orange-100 text-orange-600 font-medium  rounded-full px-3 py-1">
+                Old
+              </span>
+            )}
+          </>
+        );
       },
     },
     {
@@ -189,10 +216,15 @@ const page = () => {
       },
       cell: ({ row, getValue }) => {
         const inStock = getValue();
-        return <>{inStock > 0 
-          ? <span className="text-green-400">{inStock}</span> 
-          : <span className="text-red-400">N/A</span>
-          }</>;
+        return (
+          <>
+            {inStock > 0 ? (
+              <span className="text-green-400">{inStock}</span>
+            ) : (
+              <span className="text-red-400">N/A</span>
+            )}
+          </>
+        );
       },
     },
 
@@ -205,9 +237,11 @@ const page = () => {
           <>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>{description.substring(0,10)}...</TooltipTrigger>
+                <TooltipTrigger>
+                  {description.substring(0, 10)}...
+                </TooltipTrigger>
                 <TooltipContent className="w-48 bg-white rounded">
-                  <p >{description}</p>
+                  <p>{description}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -232,11 +266,17 @@ const page = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-white rounded">
-              <DropdownMenuItem className="text-green-600">
+              <DropdownMenuItem 
+              className="text-green-600"
+              onClick={() => handleEditRowClick(singleRowData)}
+              >
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
-              <DeleteProductDialog />
+              <DropdownMenuItem
+                className="text-red-600"
+                onClick={() => handleDeleteRowClick(singleRowData)}
+              >
+                Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -251,15 +291,27 @@ const page = () => {
     return <GlobalError />;
   }
   return (
-    <div className="">
+    <main className="">
+      <UpdateProductModal
+        isOpen={isEditModalOpen}
+        selectedRow={selectedRow}
+        closeEditModal={() => setEditModalOpen(false)}
+        refetch={refetch}
+      />
+        <DeleteProductDialog
+        isOpen={isDeleteModalOpen}
+        selectedRow={selectedRow}
+        closeDeleteModal={() => setDeleteModalOpen(false)}
+        refetch={refetch}
+        />
       <p className="text-2xl font-semibold py-4 mx-4 text-orange-600">
         Products
       </p>
       <div className="xl:w-5/6 mx-auto my-6">
         <DataTable data={products?.data} columns={columns} refetch={refetch} />
       </div>
-    </div>
+    </main>
   );
 };
 
-export default page;
+export default AdminProductsPage;

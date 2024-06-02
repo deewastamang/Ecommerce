@@ -3,7 +3,6 @@
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetClose,
   SheetHeader,
   SheetTitle,
@@ -17,20 +16,22 @@ import * as Yup from "yup";
 import { useCreateProductMutation } from "@/features/productSlice/product.slice";
 import { toast } from "sonner";
 
-const CreateProductModal = ({refetch}) => {
-    const [createProduct, {isLoading, isSuccess, isError}] = useCreateProductMutation();
-    const initialValues = {
-        title: '',
-        new: false,
-        oldPrice: 0,
-        price: 0,
-        description: '',
-        category: '',
-        image: '',
-        stock: 0,
-    }
+const CreateProductModal = ({ refetch }) => {
+  const [createProduct, { isLoading, isSuccess, isError }] =
+    useCreateProductMutation();
+  const initialValues = {
+    title: "",
+    new: false,
+    oldPrice: 0,
+    price: 0,
+    description: "",
+    category: "",
+    image: "",
+    stock: 0,
+  };
 
-    const fieldStyleClass = "col-span-3 flex h-10 w-full rounded-[5px] border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-orange-600 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+  const fieldStyleClass =
+    "col-span-3 flex h-10 w-full rounded-[5px] border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-orange-600 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
   return (
     <Sheet>
       <SheetTrigger>
@@ -46,26 +47,31 @@ const CreateProductModal = ({refetch}) => {
           </SheetTitle>
         </SheetHeader>
         <Formik
-            initialValues={initialValues}
-            // validationSchema
-            onSubmit={
-                async (values, {setSubmitting}) => {
-                    try {
-                        const res = await createProduct(values);
-                        if(res.data.success) {
-                            toast.success("Product created successfully")
-                            refetch();
-                            setSubmitting(false);
-                        } else {
-                            throw new Error("Post method failed")
-                        }
-                        
-                    } catch (error) {
-                        console.error("Failed to create product: ", error.message);
-                        setSubmitting(false);
-                    }
-                }
+          initialValues={initialValues}
+          // validationSchema
+          onSubmit={async (values, { setSubmitting }) => {
+            try {
+              const res = await createProduct(values);
+              //res output: {
+              //data: {
+              //data: {title: 'foo', new: false, oldPrice: 0, price: 0, description: '', …},
+              // msg:"Product created successfully"
+              // success:true}
+              // }
+              if (res.data.success) {
+                toast.success(
+                  `Product ${res.data.data.title} is added successfully`
+                );
+                refetch();
+                setSubmitting(false);
+              } else {
+                throw new Error("Post method failed");
+              }
+            } catch (error) {
+              console.error("Failed to create product: ", error.message);
+              setSubmitting(false);
             }
+          }}
         >
           {({ isSubmitting }) => (
             <Form className="grid gap-4 py-4">
@@ -73,48 +79,87 @@ const CreateProductModal = ({refetch}) => {
                 <Label htmlFor="title" className="text-right">
                   Title
                 </Label>
-                <Field name='title' type='text' id="title" className={fieldStyleClass} />
+                <Field
+                  name="title"
+                  type="text"
+                  id="title"
+                  className={fieldStyleClass}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="description" className="text-right">
                   Description
                 </Label>
-                <Field name='description' type='text' id="description" className={fieldStyleClass} />
+                <Field
+                  name="description"
+                  type="text"
+                  id="description"
+                  className={fieldStyleClass}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="price" className="text-right">
                   Price
                 </Label>
-                <Field name='price' type='number' id="price" className={fieldStyleClass} />
+                <Field
+                  name="price"
+                  type="number"
+                  id="price"
+                  className={fieldStyleClass}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="oldPrice" className="text-right">
                   Old Price
                 </Label>
-                <Field name='oldPrice' type='number' id="oldPrice" className={fieldStyleClass} />
+                <Field
+                  name="oldPrice"
+                  type="number"
+                  id="oldPrice"
+                  className={fieldStyleClass}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="category" className="text-right">
                   Category
                 </Label>
-                <Field name='category' type='text' id="category" className={fieldStyleClass} />
+                <Field
+                  name="category"
+                  type="text"
+                  id="category"
+                  className={fieldStyleClass}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="stock" className="text-right">
                   Stock
                 </Label>
-                <Field name='stock' type='number' id="stock" className={fieldStyleClass} />
+                <Field
+                  name="stock"
+                  type="number"
+                  id="stock"
+                  className={fieldStyleClass}
+                />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="image" className="text-right">
                   Image
                 </Label>
-                <Field name='image' type='text' id="image" className={fieldStyleClass} />
+                <Field
+                  name="image"
+                  type="text"
+                  id="image"
+                  className={fieldStyleClass}
+                />
               </div>
 
               <div className="flex justify-center py-4 items-center gap-x-2">
                 <SheetClose className="" asChild>
-                  <Button type="submit" disabled={isSubmitting || isLoading} variant="primary">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting || isLoading}
+                    variant="primary"
+                  >
                     Save changes
                   </Button>
                 </SheetClose>
