@@ -219,9 +219,9 @@ const AdminProductsPage = () => {
         return (
           <>
             {inStock > 0 ? (
-              <span className="text-green-400">{inStock}</span>
+              <span className="text-green-600">{inStock}</span>
             ) : (
-              <span className="text-red-400">N/A</span>
+              <span className="text-red-600">N/A</span>
             )}
           </>
         );

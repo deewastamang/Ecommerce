@@ -31,14 +31,12 @@ const CreateProductModal = ({ refetch }) => {
   };
 
   const fieldStyleClass =
-    "col-span-3 flex h-10 w-full rounded-[5px] border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-orange-600 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+    "col-span-3 flex h-10 w-full rounded-[5px] border border-input bg-background px-2 py-1.5 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-orange-600 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
   return (
     <Sheet>
-      <SheetTrigger>
-        <button className="flex gap-x-2 items-center text-sm bg-black text-white rounded px-4 py-3 whitespace-nowrap hover:bg-orange-600 duration-200">
+      <SheetTrigger className="flex gap-x-2 items-center text-sm bg-black text-white rounded px-4 py-3 whitespace-nowrap hover:bg-orange-600 duration-200">
           <TbLayoutGridAdd className="text-xl" />
           Add a new product
-        </button>
       </SheetTrigger>
       <SheetContent className="bg-slate-100">
         <SheetHeader className="border-b-[1px] border-b-slate-300 pb-2">
@@ -51,6 +49,7 @@ const CreateProductModal = ({ refetch }) => {
           // validationSchema
           onSubmit={async (values, { setSubmitting }) => {
             try {
+              setSubmitting(true);
               const res = await createProduct(values);
               //res output: {
               //data: {

@@ -65,7 +65,7 @@ export default function DataTable({ columns, data, refetch }) {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className='text-start first:text-center'>
+                    <TableHead key={header.id} className='text-start first:text-center first:pl-3'>
                       {header.isPlaceholder
                         ? null
                         : flexRender(

@@ -28,6 +28,13 @@ export const productSlice = createApi({
         method: "DELETE",
       }),
     }),
+    updateProduct: builder.mutation({
+      query: ({ _id, ...updatedProduct }) => ({
+        url: `/products/${_id}`,
+        method: "PUT",
+        body: updatedProduct,
+      }),
+    }),
   }),
 });
 
@@ -36,4 +43,5 @@ export const {
   useGetSingleProductQuery,
   useCreateProductMutation,
   useDeleteSingleProductMutation,
+  useUpdateProductMutation,
 } = productSlice;
