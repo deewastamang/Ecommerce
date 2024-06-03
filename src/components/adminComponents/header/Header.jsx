@@ -5,7 +5,6 @@ import React from "react";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { AiOutlineProduct } from "react-icons/ai";
-import { BiCategory } from "react-icons/bi";
 import { FaTasks } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
 import LabelIcon from "./LabelIcon";
@@ -23,11 +22,6 @@ const header = () => {
       title: "Products",
       path: "/admin/products",
       icon: <AiOutlineProduct />,
-    },
-    {
-      title: "Categories",
-      path: "/admin/categories",
-      icon: <BiCategory />,
     },
     {
       title: "Orders",

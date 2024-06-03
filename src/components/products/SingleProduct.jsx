@@ -12,16 +12,16 @@ const SingleProduct = ({ singleProduct }) => {
   const dispatch = useDispatch();
   return (
     <div className="grid lg:grid-cols-2 gap-5 bg-white p-4 rounded-xl">
-      {/* right side */}
+      {/* left side */}
       <div className=" h-96 relative">
         <Image
           className="object-cover object-top w-full max-h-[700px] rounded-xl"
-          src={singleProduct?.image}
+          src={singleProduct?.image[0] || "https://img.freepik.com/free-vector/shopping-sale-carry-bag-emblem_98292-4007.jpg?t=st=1717402526~exp=1717406126~hmac=c52c9a2c0ec62b9ce7395ed1e6a16e31eed2f4b27f9798648069cf096b7d7949&w=1380" }
           alt={singleProduct?.title}
           fill
         />
       </div>
-      {/* left side */}
+      {/* right side */}
       <div className="flex flex-col justify-center gap-y-10">
         <div className="space-y-2">
           <p className="text-3xl font-semibold">{singleProduct?.title}</p>
@@ -37,7 +37,7 @@ const SingleProduct = ({ singleProduct }) => {
           </span>
           <span className="">
             Stock:{" "}
-            <span className="text-darkText">{singleProduct?.quantity}</span>
+            <span className="text-darkText">{singleProduct?.stock || "N/A"}</span>
           </span>
         </div>
         <div className="flex items-center cursor-pointer group overflow-hidden rounded-[5px]">

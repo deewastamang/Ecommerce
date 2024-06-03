@@ -60,8 +60,8 @@ const ProductData = ({ product }) => {
         <div className="relative h-96 group overflow-hidden">
           <Image
             className="object-cover group-hover:scale-105 duration-500"
-            src={product?.image}
-            alt={`${product.title} image`}
+            src={product?.image[0] || "https://img.freepik.com/free-vector/shopping-sale-carry-bag-emblem_98292-4007.jpg?t=st=1717402526~exp=1717406126~hmac=c52c9a2c0ec62b9ce7395ed1e6a16e31eed2f4b27f9798648069cf096b7d7949&w=1380"}
+            alt={`${product.image[0]} image`}
             fill
           />
           <div className="size-full group-hover:bg-black/10 absolute"></div>/

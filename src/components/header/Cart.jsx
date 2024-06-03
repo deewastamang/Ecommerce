@@ -24,7 +24,7 @@ const CartButton = () => {
     <>
     <CartIcon className="text-xl hidden md:inline" />
     <p className="text-sm font-semibold whitespace-nowrap">
-      Rs. {totalPrice.toFixed(2)}
+      Rs. {totalPrice?.toFixed(2)}
     </p>
     <span className="bg-white text-orange-600 rounded-full text-sm font-semibold absolute size-5 -right-2 -top-1 flex justify-center items-center shadow-xl shadow-black">
       {totalQuantity}

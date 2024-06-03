@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Input } from "@/components/ui/input";
+import { TbLayoutGridAdd } from "react-icons/tb";
 
 import {
   getSortedRowModel,
@@ -26,6 +27,7 @@ export default function DataTable({ columns, data, refetch }) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [rowSelection, setRowSelection] = React.useState({});
+  const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
   const table = useReactTable({
     data,
     columns,
@@ -47,6 +49,11 @@ export default function DataTable({ columns, data, refetch }) {
 
   return (
     <div>
+      <CreateProductModal 
+      isOpen={isCreateModalOpen}
+      closeCreateModal={() => setIsCreateModalOpen(false)}
+      refetch={refetch} 
+      />
       <div className="flex items-center justify-between py-1.5">
         <Input
           placeholder="Search for a product..."
@@ -56,7 +63,11 @@ export default function DataTable({ columns, data, refetch }) {
           }
           className="max-w-xs rounded"
         />
-        <CreateProductModal refetch={refetch} />
+        <button onClick={() => setIsCreateModalOpen(true)} className="flex gap-x-2 items-center text-sm bg-black text-white rounded px-4 py-3 whitespace-nowrap hover:bg-orange-600 duration-200">
+        <TbLayoutGridAdd className="text-xl" />
+        Add a new product
+      </button>
+        
       </div>
       <div className="rounded-[5px] overflow-hidden">
         <Table>

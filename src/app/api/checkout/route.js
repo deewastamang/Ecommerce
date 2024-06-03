@@ -16,7 +16,7 @@ export const POST = async (req) => {
         product_data: {
           name: item.title,
           description: item.description,
-          images: [item.image], //because image can be multiple
+          images: [...item.image], //because image can be multiple
         },
       },
     }));

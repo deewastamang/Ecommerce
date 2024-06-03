@@ -43,7 +43,6 @@ const UpdateProductModal = ({
               const res = await updateProduct(values);
               //Output of res:
               // data: {msg: "Product updated successfully", success: true}
-              console.log("res in update is ", res);
               if (res.data.success) {
                 toast.success(`Product has been updated successfully`);
               } else {
@@ -109,11 +108,17 @@ const UpdateProductModal = ({
                   Category
                 </Label>
                 <Field
+                  as="select"
                   name="category"
                   type="text"
                   id="category"
                   className={fieldStyleClass}
-                />
+                >
+                  <option value="men">Men</option>
+                  <option value="women">Women</option>
+                  <option value="kids">Kids</option>
+                  <option value="others">Others</option>
+                </Field>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="stock" className="text-right">
@@ -138,7 +143,7 @@ const UpdateProductModal = ({
                 />
               </div>
 
-              <DialogFooter className="sm:flex sm:justify-end justify-center flex-row gap-x-2">
+              <DialogFooter className="sm:flex sm:justify-end justify-center flex-row gap-x-1">
                 <Button
                   type="submit"
                   disabled={isSubmitting || isLoading}
@@ -146,17 +151,16 @@ const UpdateProductModal = ({
                 >
                   Save changes
                 </Button>
-                <Button variant="outline" onClick={closeEditModal}>
+                <div
+                  className="border border-input bg-background rounded-[5px] hover:bg-orange-600 hover:text-white duration-200 px-3 py-1.5 flex items-center cursor-pointer text-sm font-medium"
+                  onClick={closeEditModal}
+                >
                   Cancel
-                </Button>
+                </div>
               </DialogFooter>
             </Form>
           )}
         </Formik>
-        {/* <DialogFooter className='sm:flex sm:justify-end justify-center flex-row gap-x-2'>
-          <Button type="submit" variant='primary'>Save changes</Button>
-          <Button onClick={closeEditModal} variant='outline'>Cancel</Button>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

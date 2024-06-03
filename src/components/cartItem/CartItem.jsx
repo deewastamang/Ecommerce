@@ -26,7 +26,7 @@ const CartItem = () => {
                         <div className="flex flex-col md:flex-row gap-y-2 md:gap-y-0 items-center justify-center md:justify-start gap-x-3 w-full md:w-1/3">
                             <span onClick={() => dispatch(deleteProduct(item))} className="text-xl hover:text-red-600  cursor-pointer  duration-200 absolute top-4 right-4 md:static"><AiOutlineClose /></span>
                             <div className="size-20 relative">
-                            <Image className='object-cover' src={item?.image} alt={item?.title} fill />
+                            <Image className='object-cover' src={item?.image[0] || "https://img.freepik.com/free-vector/shopping-sale-carry-bag-emblem_98292-4007.jpg?t=st=1717402526~exp=1717406126~hmac=c52c9a2c0ec62b9ce7395ed1e6a16e31eed2f4b27f9798648069cf096b7d7949&w=1380"} alt={item?.title} fill />
                             </div>
                             <p className='text-lg'>{item?.title}</p>
                         </div>

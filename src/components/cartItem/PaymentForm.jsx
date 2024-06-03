@@ -26,7 +26,8 @@ const PaymentForm = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          items: products,
+          // items: products, //use when there is backend which stores images
+          items: products.map(product => ({...product, image: ["https://img.freepik.com/free-vector/shopping-sale-carry-bag-emblem_98292-4007.jpg?t=st=1717402526~exp=1717406126~hmac=c52c9a2c0ec62b9ce7395ed1e6a16e31eed2f4b27f9798648069cf096b7d7949&w=1380"]})), 
           email: session?.user?.email,
         }),
       });
