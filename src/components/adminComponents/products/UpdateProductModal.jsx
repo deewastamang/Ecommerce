@@ -10,11 +10,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import * as Yup from "yup";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, Form, ErrorMessage, useFormikContext } from "formik";
 import { toast } from "sonner";
 
 import React from "react";
 import { useUpdateProductMutation } from "@/features/productSlice/product.slice";
+import ImageUpload from "./ImageUpload";
 
 const UpdateProductModal = ({
   isOpen,

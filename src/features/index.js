@@ -31,11 +31,6 @@ export function createPersistStorage() {
 
 const storage = createPersistStorage();
 
-const persistConfig = {
-  key: "root",
-  version: 1,
-  storage,
-};
 
 //combining all reducers from all slices and also api slices
 export const rootReducer = combineReducers({
@@ -47,6 +42,13 @@ export const rootReducer = combineReducers({
 
 //add middleware from api slices for rtk query
 export const rootApiMiddleware = [productSlice.middleware];
+
+const persistConfig = {
+    key: "root",
+    version: 1,
+    storage,
+    blacklist: [productSlice.reducerPath], //not persisting this api slice
+  };
 
 //to persist reducer data
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

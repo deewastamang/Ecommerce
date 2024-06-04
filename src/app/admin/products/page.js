@@ -2,7 +2,7 @@
 import DataTable from "@/components/adminComponents/products/ProductDataTable";
 import { useGetProductsQuery } from "@/features/productSlice/product.slice";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, Delete, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 import Loading from "@/app/loading";
@@ -86,6 +86,29 @@ const AdminProductsPage = () => {
       },
     },
     {
+      accessorKey: "description",
+      header: "Description",
+      cell: ({ row, getValue }) => {
+        const description = getValue();
+        return (
+          <>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  {description.substring(0, 10)}...
+                </TooltipTrigger>
+                <TooltipContent className="w-48 bg-white rounded">
+                  <p>{description}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </>
+        );
+      },
+      enableResizing: false,
+      size: 800,
+    },
+    {
       accessorKey: "price",
       header: ({ column }) => {
         return (
@@ -158,50 +181,6 @@ const AdminProductsPage = () => {
       },
     },
     {
-      accessorKey: "rating",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Rating
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-    },
-    {
-      accessorKey: "new",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            New
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row, getValue }) => {
-        const isNew = getValue();
-        return (
-          <>
-            {isNew ? (
-              <span className="bg-green-100 text-green-600 font-medium rounded-full px-3 py-1">
-                New
-              </span>
-            ) : (
-              <span className="bg-orange-100 text-orange-600 font-medium  rounded-full px-3 py-1">
-                Old
-              </span>
-            )}
-          </>
-        );
-      },
-    },
-    {
       accessorKey: "stock",
       header: ({ column }) => {
         return (
@@ -227,29 +206,49 @@ const AdminProductsPage = () => {
         );
       },
     },
-
     {
-      accessorKey: "description",
-      header: "Description",
+      accessorKey: "createdAt",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Added at
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
       cell: ({ row, getValue }) => {
-        const description = getValue();
+        const date = getValue();
         return (
           <>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  {description.substring(0, 10)}...
-                </TooltipTrigger>
-                <TooltipContent className="w-48 bg-white rounded">
-                  <p>{description}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            {date ? date.substring(0,10) : <span className="text-red-800">N/A</span>}
           </>
         );
       },
-      enableResizing: false,
-      size: 800,
+    },
+    {
+      accessorKey: "updatedAt",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Updated at
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row, getValue }) => {
+        const date = getValue();
+        return (
+          <>
+            {date ? date.substring(0,10) : <span className="text-red-800">N/A</span>}
+          </>
+        );
+      },
     },
     {
       id: "actions",
