@@ -33,7 +33,7 @@ const OrderDetails = () => {
               <div className="relative size-14 w-20">
                 <Image
                   className="object-cover"
-                  src={item?.image}
+                  src={item?.image[0] || "https://img.freepik.com/free-vector/shopping-sale-carry-bag-emblem_98292-4007.jpg?t=st=1717402526~exp=1717406126~hmac=c52c9a2c0ec62b9ce7395ed1e6a16e31eed2f4b27f9798648069cf096b7d7949&w=1380"}
                   alt={item?.title}
                   // width="500"
                   // height="500"

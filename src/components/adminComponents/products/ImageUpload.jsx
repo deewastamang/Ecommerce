@@ -11,9 +11,9 @@ import Image from 'next/image';
 import { Label } from "@/components/ui/label";
 import DragAndDropIcon from '@/../../public/assets/images/dragAndDrop.png'; // Adjust the import path accordingly
 
-const ImageUpload = ({ formik }) => {
+const ImageUpload = ({ formik, forUpdateModal }) => {
   const [dragAndDropProductPictures, setDragAndDropProductPictures] = React.useState([]);
-  const [fileUrls, setFileUrls] = React.useState([]);
+  const [fileUrls, setFileUrls] = React.useState(forUpdateModal || []);
 
   const readFileAsDataURL = (file) => {
     return new Promise((resolve, reject) => {

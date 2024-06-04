@@ -249,7 +249,7 @@ const CreateProductModal = ({ refetch, isOpen, closeCreateModal }) => {
 
           <ImageUpload formik={formik} />
 
-          <div className="flex justify-center py-4 items-center gap-x-2">
+          <div className="flex justify-center py-4 items-center md:justify-end gap-x-2">
             <Button type="submit" disabled={isLoading} variant="primary">
               Save changes
             </Button>

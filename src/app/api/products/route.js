@@ -58,3 +58,33 @@ export const POST = async (req) => {
     );
   }
 };
+
+//for bulk delete
+export const DELETE = async (req) => {
+  try {
+    await connectToDb();
+    // const checkProductExistence = await ProductModel.findOne({ _id });
+    // if (!checkProductExistence) {
+    //   throw new Error("Product not found");
+    // }
+    const reqBody = await req.json();
+    if(reqBody.length === 0) {
+      throw new Error("Please send products to delete")
+    }
+    const foo = await ProductModel.deleteMany({ _id: {$in: reqBody} }); // output of foo: { acknowledged: true, deletedCount: 1 }
+    return NextResponse.json({
+      success: true,
+      msg: "Products deleted successfully",
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        msg: `products loading error: ${error.message}`,
+      },
+      {
+        status: 400,
+      }
+    );
+  }
+};

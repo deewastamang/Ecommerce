@@ -98,7 +98,7 @@ const AdminProductsPage = () => {
                   {description.substring(0, 10)}...
                 </TooltipTrigger>
                 <TooltipContent className="w-48 bg-white rounded">
-                  <p>{description}</p>
+                  <p className="">{description}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
