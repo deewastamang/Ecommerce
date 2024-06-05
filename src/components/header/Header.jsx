@@ -49,27 +49,18 @@ const Header = () => {
         <div className="flex gap-x-4 md:order-4">
           {/* login / Register  */}
           {!session && (
-            <div
-              onClick={() => {
-                signIn();
-                toast.success("Logged in successfully", {
-                  duration: 5000,
-                  action: {
-                    label: "Close",
-                    onClick: () => toast.dismiss(),
-                  },
-                });
-              }}
-              className="bg-bgLight text-gray-500 flex items-center justify-center p-2 rounded-full hover:bg-white border-[1px] border-gray-200 hover:border-orange-500 duration-200 gap-x-1.5 cursor-pointer"
+            <Link
+              href="/login"
+              className="bg-bgLight text-gray-500 flex items-center justify-center px-4 py-2 rounded-full hover:bg-white border-[1px] border-gray-200 hover:border-orange-500 duration-200 gap-x-1.5 cursor-pointer"
             >
               <ProfileIcon className="text-xl" />
               <p className="text-sm font-semibold">Login</p>
-            </div>
+            </Link>
           )}
           {/* cart button */}
           <Link
             href="/cart"
-            className="bg-black hover:bg-slate-950  rounded-full text-slate-100 hover:text-white hidden md:flex items-center justify-center gap-x-1.5 px-1 lg:px-5 cursor-pointer border border-black hover:border-orange-600 duration-200 relative"
+            className="bg-black hover:bg-slate-950  rounded-full text-slate-100 hover:text-white hidden md:flex items-center justify-center gap-x-1.5 px-1 lg:px-4 lg:py-2 cursor-pointer border border-black hover:border-orange-600 duration-200 relative"
           >
             <Cart />
           </Link>

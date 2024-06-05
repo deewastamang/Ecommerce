@@ -1,6 +1,9 @@
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { connectToDb } from "./dbConnection";
+import { UserModel } from "./models/userModel";
+import { login } from "@/helper";
 
 export const authOptions = {
   providers: [
@@ -22,9 +25,9 @@ export const authOptions = {
       name: "Credentials",
       credentials: {
         username: {
-          label: "Username",
-          type: "text",
-          placeholder: "Enter your username",
+          label: "email",
+          type: "email",
+          placeholder: "Enter your email",
         },
         password: {
           label: "Password",
@@ -34,37 +37,74 @@ export const authOptions = {
       },
       async authorize(credentials) {
         try {
-          const dummyUser = {
-            id: "199",
-            name: "deewas tamang",
-            password: "ddd",
-          };
-          if (
-            credentials?.username === dummyUser.name &&
-            credentials?.password === dummyUser.password
-          ) {
-            return dummyUser;
+          const user = await login(credentials);
+          if (user) {
+            return user; // user container user object form database
           } else {
-            return null;
+            throw new Error("Not a register user. Sign up first.");
           }
         } catch (error) {
-          console.log(error);
+          const errorMessage = error.message || "Login failed"; //error message thrown from login() fuction
+          const modifiedError = new Error(errorMessage);
+          modifiedError.code = error.code; // Preserve custom error code if present
+          throw modifiedError;
         }
       },
     }),
   ],
-  // pages: {
-  //   signIn: "/login",
-  //   error: "/error",
-  // },
+  pages: {
+    signIn: "/login", //will redirect user to login page if not authenticated while visiting protected route
+    error: "/error",
+  },
   secret: process.env.NEXTAUTH_SECRET,
-  sessoin: {
+  session: {
     strategy: "jwt",
   },
   jwt: {
-    encryption: false,
+    encryption: true,
   },
-  // callbacks: {
-    
-  // }
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      console.log("user email is ", user.email);
+      if (account.provider == "google" || account.provider == "github") {
+        try {
+          await connectToDb();
+          const checkUser = await UserModel.findOne({ email: user?.email });
+          if (checkUser) {
+            console.log(`Welcome back ${user?.name}`);
+            return true;
+          } else {
+            const newUser = new UserModel({
+              name: user?.name,
+              email: user?.email,
+              img: user?.image,
+            });
+            await newUser.save();
+          }
+          return true;
+        } catch (error) {
+          console.error("SignIn error:", error.message); // more specific logging
+          return false;
+        }
+      }
+      return true;
+    },
+    async jwt({ token }) {
+      return token;
+    },
+    async session({ session, token }) {
+      session.user.id = token.jti;
+      return session;
+    },
+    // not working
+    // async authorized({ auth, request }) {
+    //   console.log(
+    //     "auth of user is ",
+    //     auth,
+    //     " and requrest from authorized function i s ",
+    //     request
+    //   );
+    //   return true;
+    // },
+  },
 };
