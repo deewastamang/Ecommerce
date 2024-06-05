@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   products: [],
   userInfo: null,
-  orderData: {},
   totalQuantity: 0,
   totalPrice: 0,
 };
@@ -58,18 +57,6 @@ export const shoppingSlice = createSlice({
     deleteUser: (state) => {
       state.userInfo = null;
     },
-    saveOrder: (state, {payload}) => {
-      state.orderData = payload
-      // if(Object.keys(state.orderData).length === 0) {
-      //   state.orderData = payload
-      // } else {
-      //   state.orderData.order.push(...payload.order);
-      //   state.orderData.id = payload.id;
-      // }
-    },
-    resetOrder: (state) => {
-      state.orderData = [];
-    }
   },
 });
 
@@ -83,7 +70,5 @@ export const {
   submitTotalQuantity,
   addUser,
   deleteUser,
-  saveOrder,
-  resetOrder,
 } = shoppingSlice.actions;
 export default shoppingSlice.reducer;

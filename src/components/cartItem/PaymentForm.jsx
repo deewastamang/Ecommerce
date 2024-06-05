@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import FormattedPrice from "../products/FormattedPrice";
 import { useSession } from "next-auth/react";
 import { loadStripe } from "@stripe/stripe-js";
-import { saveOrder } from "@/features/shoppingSlice/shopping.slice";
 import { useCreateOrderMutation } from "@/features/orderSlice/order.slice";
 
 const PaymentForm = () => {
@@ -21,9 +20,12 @@ const PaymentForm = () => {
 
   const handleCheckout = async () => {
     try {
+      if(!session) {
+        return toast.error("Please log in first")
+      }
       const stripe = await stripePromise;
       const userEmail = session?.user?.email;
-      const userName = session?.user?.name;
+      const userId = session?.user?.userId;
 
       const response = await fetch("http://localhost:3000/api/checkout", {
         method: "POST",
@@ -46,63 +48,22 @@ const PaymentForm = () => {
         throw new Error("Failed to create stripe payment");
       }
 
-      const data = await response.json();
+      const result = await response.json();
 
       const payload = {
-        email: userEmail,
-        name: userName,
+        userId: userId,
         orders: products,
-        stripeSessionId: data.data.id,
+        stripeSessionId: result.data.id,
       }
-      const result = await createOrder(payload);
-      if (result.success) {
+      const createOrderResult = await createOrder(payload);
+      if (createOrderResult.success) {
         toast.success("Successfully saved your order");
       }
-
-      // dispatch(saveOrder({ order: processedProducts, id: data.data.id }));
-      stripe?.redirectToCheckout({ sessionId: data.data.id });
+      stripe?.redirectToCheckout({ sessionId: result.data.id });
     } catch (error) {
       console.error("Error occured: ", error.message);
     }
   };
-  // const handleCheckout = async () => {
-  //   try {
-  //     const stripe = await stripePromise;
-
-  //     const response = await fetch("http://localhost:3000/api/checkout", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         // items: products, //use when there is backend which stores images
-  //         items: products.map((product) => ({
-  //           ...product,
-  //           image: [
-  //             "https://img.freepik.com/free-vector/shopping-sale-carry-bag-emblem_98292-4007.jpg?t=st=1717402526~exp=1717406126~hmac=c52c9a2c0ec62b9ce7395ed1e6a16e31eed2f4b27f9798648069cf096b7d7949&w=1380",
-  //           ],
-  //         })),
-  //         email: session?.user?.email,
-  //       }),
-  //     });
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       const result = await createOrder({
-  //         email: session?.user?.email,
-  //         name: session?.user?.name,
-  //         orders: products,
-  //         stripeSessionId: data.data.id,
-  //       });
-  //       // dispatch(saveOrder({ order: products, id: data.data.id }));
-  //       // stripe?.redirectToCheckout({ sessionId: data.data.id });
-  //     } else {
-  //       throw new Error("Failed to create stripe payment");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error occured: ", error.message);
-  //   }
-  // };
-
   //==========stripe payment ends here=========================
   return (
     <div className="w-full bg-white p-4 space-y-2">

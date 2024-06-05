@@ -15,21 +15,24 @@ import {
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/features/shoppingSlice/shopping.slice";
+import { useSession } from "next-auth/react";
 
 const WishlistDetails = () => {
   const dispatch = useDispatch();
+  const {data: session} = useSession();
   const {
     data: wishlist,
     isLoading: getWishlistLoading,
+    error,
     refetch,
-  } = useGetWishlistQuery();
+  } = useGetWishlistQuery({userId: session?.user?.userId});
   const [
     removeWish,
     { isLoading: isDeleting, isSuccess: deleted, error: deleteError },
   ] = useRemoveWishMutation();
 
   const handleDeleteWish = async (wish) => {
-    const res = await removeWish(wish._id);
+    const res = await removeWish({wishId: wish._id, userId: session?.user?.userId});
     if(!res?.data?.success) {
         toast.success("Something went wrong")
         return
@@ -39,7 +42,7 @@ const WishlistDetails = () => {
     return 
   }
 
-  if (wishlist?.data?.length === 0 || wishlist?.data === null) {
+  if (wishlist?.data?.length === 0 || wishlist?.data === null || error) {
     return (
       <div className="flex flex-col gap-y-6 items-center justify-center h-96 px-4">
         <p className="text-4xl text-orange-600 font-medium tracking-wide w-full p-2 text-center ">

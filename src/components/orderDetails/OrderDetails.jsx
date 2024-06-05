@@ -7,21 +7,23 @@ import Link from "next/link";
 
 import FormattedPrice from "../products/FormattedPrice";
 import { useGetOrdersQuery } from "@/features/orderSlice/order.slice";
+import { useSession } from "next-auth/react";
 
 const OrderDetails = () => {
-  const {data: orderData, error, isLoading, refetch } = useGetOrdersQuery();
+  const {data: session} = useSession();
+  const {data: orderData, error, isLoading, refetch } = useGetOrdersQuery({userId: session?.user?.userId});
   const [totalPrice, setTotalPrice] = useState(0)
-
+  console.log('order in order page ', orderData)
   useEffect(() => {
     let totalPrice = 0;
-    orderData?.data?.orders.map(item => {
+    orderData?.data?.orders?.map(item => {
       totalPrice += item.price * item.quantity;
       return 
     })
     setTotalPrice(totalPrice)
   },[orderData])
 
-  if(orderData?.data?.orders.length === 0 || orderData?.data === null) {
+  if(orderData?.data?.orders?.length === 0 || orderData?.data === null || error) {
     return (
       <div className="flex flex-col gap-y-6 items-center justify-center h-96 px-4">
       <p className="text-4xl text-orange-600 font-medium tracking-wide w-full p-2 text-center ">

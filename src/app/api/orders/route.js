@@ -5,21 +5,19 @@ import { connectToDb } from "@/lib/dbConnection";
 export const GET = async (req) => {
   try {
     await connectToDb();
-    // with search query
-    // const url = new URL(req.url);
-    // const email = url.searchParams.get("email");
-    // if (!email) {
-    //   throw new Error("Email not registered");
-    // }
-    // const user = await UserOrderModel.find({ email });
-    // if(!user) {
-    //     throw new Error("User not found")
-    // }
-    const user = await UserOrderModel.findOne({})
+    const url = new URL(req.url);
+    const userId = url.searchParams.get("userId");
+    if (!userId) {
+      throw new Error("Send userId in search parameter");
+    }
+    const orderData = await UserOrderModel.findOne({ userId });
+    if(!orderData) {
+        return NextResponse.json({success: true, msg: "No any orders currently", data: []})
+    }
     return NextResponse.json({
-      msg: "Orders fetched successfully",
+      msg: "orderData fetched successfully",
       success: true,
-      data: user,
+      data: orderData,
     });
   } catch (error) {
     return NextResponse.json(
@@ -38,16 +36,16 @@ export const POST = async (req) => {
   try {
     await connectToDb();
     const reqBody = await req.json();
-    const checkExistingUserOrder = await UserOrderModel.findOne({ email: reqBody.email });
+    const checkUserExists = await UserOrderModel.findOne({ _id: reqBody.userId });
 
-    if (checkExistingUserOrder) {
+    if (checkUserExists) {
       // Update existing order by adding new order
-      const existingOrders = checkExistingUserOrder.orders;
+      const existingOrders = checkUserExists.orders;
       const newOrders = reqBody.orders;
 
       // Merge existing and new orders, updating quantities for duplicate orders
       const mergedOrders = [...existingOrders, ...newOrders].reduce((acc, order) => {
-        const existingOrder = acc.find(ord => ord._id.toString() === order._id.toString());
+        const existingOrder = acc.find(product => product._id.toString() === order._id.toString());
         if (existingOrder) {
           existingOrder.quantity += order.quantity;
         } else {
@@ -56,8 +54,8 @@ export const POST = async (req) => {
         return acc;
       }, []);
 
-      checkExistingUserOrder.orders = mergedOrders;
-      await checkExistingUserOrder.save();
+      checkUserExists.orders = mergedOrders;
+      await checkUserExists.save();
 
       return NextResponse.json({
         msg: "Orders have been updated successfully",

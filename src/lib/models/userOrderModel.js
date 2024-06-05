@@ -3,16 +3,14 @@ import mongoose from 'mongoose';
 import { productSchema } from './productModel';
 
 const userOrderSchema = new mongoose.Schema({
-    email: {
-        type: String,
+    userId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'user',
         required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
+      },
     orders: {
         type: [productSchema],
+        default: [],
     },
     stripeSessionId: {
         type: String,
@@ -26,6 +24,7 @@ const userOrderSchema = new mongoose.Schema({
     },
     wishlist: {
         type: [productSchema],
+        default: [],
     }
 },{timestamps: true});
 

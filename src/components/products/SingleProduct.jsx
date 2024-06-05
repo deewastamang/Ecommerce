@@ -7,49 +7,68 @@ import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/features/shoppingSlice/shopping.slice";
 import { toast } from "sonner";
-import { useAddWishMutation, useGetWishlistQuery, useRemoveWishMutation } from "@/features/orderSlice/order.slice";
+import {
+  useAddWishMutation,
+  useGetWishlistQuery,
+  useRemoveWishMutation,
+} from "@/features/orderSlice/order.slice";
 import { useSession } from "next-auth/react";
 
 const SingleProduct = ({ singleProduct }) => {
   const dispatch = useDispatch();
   const { data: session } = useSession();
-  const { data: wishlist, isLoading: getWishlistLoading, refetch } = useGetWishlistQuery();
-  const [addWish, { isLoading: wishPostLoading, isSuccess, isError }] = useAddWishMutation();
-  const [removeWish, {isLoading: isDeleting, isSuccess: deleted, error: deleteError}] = useRemoveWishMutation();
-  
+  const {
+    data: wishlist,
+    isLoading: getWishlistLoading,
+    refetch,
+  } = useGetWishlistQuery({ userId: session?.user?.userId });
+  const [addWish, { isLoading: wishPostLoading, isSuccess, isError }] =
+    useAddWishMutation();
+  const [
+    removeWish,
+    { isLoading: isDeleting, isSuccess: deleted, error: deleteError },
+  ] = useRemoveWishMutation();
+
   const [wishExists, setWishExists] = useState(false);
 
   useEffect(() => {
-    const checkWish = wishlist?.data?.find(wish => wish._id === singleProduct._id);
+    const checkWish = wishlist?.data?.find(
+      (wish) => wish._id === singleProduct._id
+    );
     setWishExists(!!checkWish);
   }, [wishlist, singleProduct._id]);
 
   const handleWishlistClick = async () => {
     try {
-      const payload = {
-        email: session?.user?.email,
-        name: session?.user?.name,
-        wishlist: [singleProduct]
-      };
-      if(wishExists) {
-        const result = await removeWish(singleProduct._id);
-        if(result?.data?.success) {
-          setWishExists(false)
-          toast.success(`${singleProduct?.title} is removed from wishlist`)
-          refetch()
-        }
-        return
+      if(!session) {
+        return toast.error("Please login first")
       }
-      const res = await addWish(payload);
-      if (res.data.success) {
-        toast.success(`${singleProduct.title} is added to wishlist`);
-        refetch();
+      const payload = {
+        userId: session?.user?.userId,
+        wishlist: singleProduct,
+      };
+      if (wishExists) {
+        const result = await removeWish({
+          wishId: singleProduct._id,
+          userId: session?.user?.userId,
+        });
+        if (result?.data?.success) {
+          setWishExists(false);
+          toast.success(`${singleProduct?.title} is removed from wishlist`);
+          refetch();
+        } else throw new Error()
+        return;
       } else {
-        throw new Error("Post wishlist failed");
+        const res = await addWish(payload);
+        if (res?.data?.success) {
+          toast.success(`${singleProduct.title} is added to wishlist`);
+          refetch();
+        } else throw new Error()
+        return 
       }
     } catch (error) {
       console.error("Failed to post wishlist", error.message);
-      toast.error("Failed to add to wishlist");
+      toast.error("Failed to add to the wishlist");
     }
   };
 
@@ -92,7 +111,9 @@ const SingleProduct = ({ singleProduct }) => {
           <button
             onClick={() => {
               dispatch(addToCart(singleProduct));
-              toast.success(`${singleProduct.title.substring(0, 15)} is added to cart.`);
+              toast.success(
+                `${singleProduct.title.substring(0, 15)} is added to cart.`
+              );
             }}
             className="bg-darkText text-slate-100 px-6 py-3 text-sm uppercase flex items-center justify-center border-r-[1px] border-r-slate-500"
           >

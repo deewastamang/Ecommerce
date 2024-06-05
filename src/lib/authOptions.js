@@ -72,6 +72,7 @@ export const authOptions = {
           const checkUser = await UserModel.findOne({ email: user?.email });
           if (checkUser) {
             console.log(`Welcome back ${user?.name}`);
+            user.id = checkUser._id; // Include user ID for JWT callback
             return true;
           } else {
             const newUser = new UserModel({
@@ -79,9 +80,10 @@ export const authOptions = {
               email: user?.email,
               img: user?.image,
             });
-            await newUser.save();
+            const savedUser = await newUser.save();
+            user.id = savedUser._id; // Include user ID for JWT callback
+            return true;
           }
-          return true;
         } catch (error) {
           console.error("SignIn error:", error.message); // more specific logging
           return false;
@@ -89,11 +91,16 @@ export const authOptions = {
       }
       return true;
     },
-    async jwt({ token }) {
+    async jwt({ token, user }) {
+      if(user) {
+        // console.log('token from jwt callback: ', token,' user from jwt callback: ', user)
+        token.userId = user.id; // Add user ID to the token
+      }
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.jti;
+      // console.log('session from session callback: ', session, ' and token from session callback: ', token)
+      session.user.userId = token.userId; // Add user ID to the session
       return session;
     },
     // not working

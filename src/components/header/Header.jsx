@@ -22,6 +22,7 @@ const Header = () => {
     if (session) {
       dispatch(
         addUser({
+          userId: session?.user?.userId,
           name: session?.user?.name,
           email: session?.user?.email,
           image: session?.user?.image,
