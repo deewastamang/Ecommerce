@@ -10,10 +10,10 @@ export const orderSlice = createApi({
         keepUnusedDataFor: 0,
       }),
     createOrder: builder.mutation({
-      query: (newProduct) => ({
+      query: (newOrders) => ({
         url: "/orders",
         method: "POST",
-        body: newProduct,
+        body: newOrders,
       }),
     }),
     getWishlist: builder.query({

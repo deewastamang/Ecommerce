@@ -36,7 +36,7 @@ export const POST = async (req) => {
   try {
     await connectToDb();
     const reqBody = await req.json();
-    const checkUserExists = await UserOrderModel.findOne({ _id: reqBody.userId });
+    const checkUserExists = await UserOrderModel.findOne({ userId: reqBody.userId });
 
     if (checkUserExists) {
       // Update existing order by adding new order
