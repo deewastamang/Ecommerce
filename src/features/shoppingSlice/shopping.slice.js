@@ -59,7 +59,13 @@ export const shoppingSlice = createSlice({
       state.userInfo = null;
     },
     saveOrder: (state, {payload}) => {
-      state.orderData = payload;
+      state.orderData = payload
+      // if(Object.keys(state.orderData).length === 0) {
+      //   state.orderData = payload
+      // } else {
+      //   state.orderData.order.push(...payload.order);
+      //   state.orderData.id = payload.id;
+      // }
     },
     resetOrder: (state) => {
       state.orderData = [];
