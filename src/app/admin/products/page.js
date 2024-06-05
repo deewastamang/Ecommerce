@@ -6,7 +6,8 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 import Loading from "@/app/loading";
-import GlobalError from "next/dist/client/components/error-boundary";
+import GlobalError from "@/app/global-error";
+import { ImFilesEmpty } from "react-icons/im";
 
 import {
   DropdownMenu,
@@ -24,6 +25,8 @@ import {
 
 import DeleteProductDialog from "@/components/adminComponents/products/DeleteProductDialog";
 import UpdateProductModal from "@/components/adminComponents/products/UpdateProductModal";
+import { dateFormatter } from "@/helper";
+import { Badge } from "@/components/ui/badge";
 
 const AdminProductsPage = () => {
   const { data: products, error, isLoading, refetch } = useGetProductsQuery();
@@ -68,6 +71,24 @@ const AdminProductsPage = () => {
       enableHiding: false,
     },
     {
+      accessorKey: "_id",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            ID
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row, getValue }) => {
+        const title = getValue();
+        return <span className="font-medium"><Badge variant="adminTable"><ImFilesEmpty className="mr-2" /> {title}</Badge></span>;
+      },
+    },
+    {
       accessorKey: "title",
       header: ({ column }) => {
         return (
@@ -82,7 +103,7 @@ const AdminProductsPage = () => {
       },
       cell: ({ row, getValue }) => {
         const title = getValue();
-        return <span className="font-medium text-blue-400">{title}</span>;
+        return <span className="font-medium"> {title}</span>;
       },
     },
     {
@@ -169,13 +190,16 @@ const AdminProductsPage = () => {
         const category = getValue();
         return (
           <>
+          <Badge variant="adminTable">
             {category === "women" ? (
-              <span className="text-pink-400">Women</span>
+              <span className="text-pink-600">Women</span>
             ) : category === "men" ? (
-              <span className="text-blue-400">Men</span>
+              <span className="text-blue-600">Men</span>
             ) : (
-              <span className="text-orange-400">{category}</span>
+              <span className="text-orange-600">{category}</span>
             )}
+
+          </Badge>
           </>
         );
       },
@@ -220,10 +244,23 @@ const AdminProductsPage = () => {
         );
       },
       cell: ({ row, getValue }) => {
-        const date = getValue();
+        const dateString = getValue();
+        const date = dateString
+          ? dateFormatter(dateString).substring(0, 10)
+          : null;
+        const time = dateString
+          ? dateFormatter(dateString).substring(11, 27)
+          : null;
         return (
           <>
-            {date ? date.substring(0,10) : <span className="text-red-800">N/A</span>}
+            {dateString ? (
+              <div className="flex flex-col ">
+              <div className="font-semibold text-black">{date}</div>
+              <div className="text-slate-500 font-medium text-xs">{time}</div>
+            </div>
+            ) : (
+              <span className="text-red-800">N/A</span>
+            )}
           </>
         );
       },
@@ -242,10 +279,23 @@ const AdminProductsPage = () => {
         );
       },
       cell: ({ row, getValue }) => {
-        const date = getValue();
+        const dateString = getValue();
+        const date = dateString
+          ? dateFormatter(dateString).substring(0, 10)
+          : null;
+        const time = dateString
+          ? dateFormatter(dateString).substring(11, 27)
+          : null;
         return (
           <>
-            {date ? date.substring(0,10) : <span className="text-red-800">N/A</span>}
+            {dateString ? (
+              <div className="flex flex-col ">
+                <div className="font-semibold text-black">{date}</div>
+                <div className="text-slate-500 font-medium text-xs">{time}</div>
+              </div>
+            ) : (
+              <span className="text-red-800">N/A</span>
+            )}
           </>
         );
       },
@@ -265,9 +315,9 @@ const AdminProductsPage = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-white rounded">
-              <DropdownMenuItem 
-              className="text-green-600"
-              onClick={() => handleEditRowClick(singleRowData)}
+              <DropdownMenuItem
+                className="text-green-600"
+                onClick={() => handleEditRowClick(singleRowData)}
               >
                 Edit
               </DropdownMenuItem>
@@ -290,26 +340,21 @@ const AdminProductsPage = () => {
     return <GlobalError />;
   }
   return (
-    <main className="">
+    <div>
       <UpdateProductModal
         isOpen={isEditModalOpen}
         selectedRow={selectedRow}
         closeEditModal={() => setEditModalOpen(false)}
         refetch={refetch}
       />
-        <DeleteProductDialog
+      <DeleteProductDialog
         isOpen={isDeleteModalOpen}
         selectedRow={selectedRow}
         closeDeleteModal={() => setDeleteModalOpen(false)}
         refetch={refetch}
-        />
-      <p className="text-2xl font-semibold py-4 mx-4 text-orange-600">
-        Products
-      </p>
-      <div className="xl:w-5/6 mx-auto my-6">
-        <DataTable data={products?.data} columns={columns} refetch={refetch} />
-      </div>
-    </main>
+      />
+      <DataTable data={products?.data} columns={columns} refetch={refetch} />
+    </div>
   );
 };
 
