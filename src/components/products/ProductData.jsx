@@ -88,7 +88,7 @@ const ProductData = ({ product }) => {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <button onClick={() => dispatch(addToCart(product)) && toast.success(`${product.title.substring(0,15)} added successfully.`)} className="whitespace-nowrap flex items-center gap-x-2 bg-orange-600 px-4 py-2 text-sm tracking-wide rounded-full text-slate-100 hover:bg-orange-800 hover:text-white duration-200">
+          <button onClick={() => dispatch(addToCart(product)) && toast.success(`${product.title.substring(0,15)} is added to cart.`)} className="whitespace-nowrap flex items-center gap-x-2 bg-orange-600 px-4 py-2 text-sm tracking-wide rounded-full text-slate-100 hover:bg-orange-800 hover:text-white duration-200">
             <CartIcon className="text-xl" />
             Add to cart
           </button>

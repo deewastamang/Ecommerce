@@ -20,7 +20,24 @@ export const orderSlice = createApi({
         body: newProduct,
       }),
     }),
+    getWishlist: builder.query({
+      query: () => "/wishlist",
+      keepUnusedDataFor: 0,
+    }),
+    addWish: builder.mutation({
+      query: (newWish) => ({
+        url: "/wishlist",
+        method: "POST",
+        body: newWish,
+      }),
+    }),
+    removeWish: builder.mutation({
+      query: (wishId) => ({
+        url: `/wishlist/${wishId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
-export const { useGetOrdersQuery, useCreateOrderMutation } = orderSlice;
+export const { useGetOrdersQuery, useCreateOrderMutation, useGetWishlistQuery, useAddWishMutation, useRemoveWishMutation } = orderSlice;

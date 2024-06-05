@@ -1,6 +1,6 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import FormattedPrice from "../products/FormattedPrice";
 import { useSession } from "next-auth/react";
 import { loadStripe } from "@stripe/stripe-js";
@@ -8,7 +8,6 @@ import { saveOrder } from "@/features/shoppingSlice/shopping.slice";
 import { useCreateOrderMutation } from "@/features/orderSlice/order.slice";
 
 const PaymentForm = () => {
-  const dispatch = useDispatch();
   const { data: session } = useSession();
   const [createOrder, { isLoading, isSuccess, isError }] =
     useCreateOrderMutation();
@@ -49,12 +48,13 @@ const PaymentForm = () => {
 
       const data = await response.json();
 
-      const result = await createOrder({
+      const payload = {
         email: userEmail,
         name: userName,
         orders: products,
         stripeSessionId: data.data.id,
-      });
+      }
+      const result = await createOrder(payload);
       if (result.success) {
         toast.success("Successfully saved your order");
       }

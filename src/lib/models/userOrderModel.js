@@ -16,13 +16,16 @@ const userOrderSchema = new mongoose.Schema({
     },
     stripeSessionId: {
         type: String,
-        required: true,
+        required: false,
     },
     status: {
         type: String,
         enum: ['pending', 'canceled', 'delivered'],
         default: 'pending',
 
+    },
+    wishlist: {
+        type: [productSchema],
     }
 },{timestamps: true});
 
