@@ -7,7 +7,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 import Loading from "@/app/loading";
 import GlobalError from "@/app/global-error";
-import { ImFilesEmpty } from "react-icons/im";
+import { ImFilesEmpty } from "react-icons/im";;
+import { IoKeyOutline } from "react-icons/io5";
+import { MdOutlineDescription } from "react-icons/md";
+import { MdOutlineSubtitles } from "react-icons/md";
+import { IoPricetagOutline } from "react-icons/io5";
+import { TbCategory } from "react-icons/tb";
+import { IoStorefrontOutline } from "react-icons/io5";
+import { MdOutlineDateRange } from "react-icons/md";
 
 import {
   DropdownMenu,
@@ -77,15 +84,35 @@ const AdminProductsPage = () => {
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
           >
+            <IoKeyOutline />
             ID
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row, getValue }) => {
-        const title = getValue();
-        return <span className="font-medium"><Badge variant="adminTable"><ImFilesEmpty className="mr-2" /> {title}</Badge></span>;
+        const productId = getValue();
+        return (
+          <>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                <Badge variant="adminTable">
+                  <ImFilesEmpty className="mr-2" /> 
+                  {productId.substring(0,5)}...
+                </Badge>
+                </TooltipTrigger>
+                <TooltipContent className="w-60 bg-white rounded">
+                  <p className="">{productId}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </>
+        );
+        // const title = getValue();
+        // return <span className="font-medium"><Badge variant="adminTable"><ImFilesEmpty className="mr-2" /> {title.substring(0,5)}</Badge></span>;
       },
     },
     {
@@ -95,7 +122,9 @@ const AdminProductsPage = () => {
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
           >
+            <MdOutlineSubtitles className="text-lg" />
             Title
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
@@ -103,12 +132,24 @@ const AdminProductsPage = () => {
       },
       cell: ({ row, getValue }) => {
         const title = getValue();
-        return <span className="font-medium"> {title}</span>;
+        return <span className=""> {title}</span>;
       },
     },
     {
       accessorKey: "description",
-      header: "Description",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
+          >
+            <MdOutlineDescription />
+            Description
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
       cell: ({ row, getValue }) => {
         const description = getValue();
         return (
@@ -136,7 +177,9 @@ const AdminProductsPage = () => {
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
           >
+            <IoPricetagOutline/>
             Price
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
@@ -145,9 +188,9 @@ const AdminProductsPage = () => {
       cell: ({ row, getValue }) => {
         const price = getValue();
         return (
-          <>
-            <span className="font-medium">NPR</span> {price.toFixed(2)}
-          </>
+          <Badge variant="adminTable">
+            NPR {price.toFixed(2)}
+          </Badge>
         );
       },
     },
@@ -158,7 +201,9 @@ const AdminProductsPage = () => {
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
           >
+            <IoPricetagOutline/>
             Old Price
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
@@ -167,9 +212,9 @@ const AdminProductsPage = () => {
       cell: ({ row, getValue }) => {
         const price = getValue();
         return (
-          <>
-            <span className="font-medium">NPR</span> {price.toFixed(2)}
-          </>
+          <Badge variant="adminTable">
+          NPR {price.toFixed(2)}
+          </Badge>
         );
       },
     },
@@ -180,7 +225,9 @@ const AdminProductsPage = () => {
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
           >
+            <TbCategory />
             Category
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
@@ -211,7 +258,9 @@ const AdminProductsPage = () => {
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
           >
+            <IoStorefrontOutline />
             Stock
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
@@ -222,7 +271,7 @@ const AdminProductsPage = () => {
         return (
           <>
             {inStock > 0 ? (
-              <span className="text-green-600">{inStock}</span>
+              <span className="text-green-700">{inStock}</span>
             ) : (
               <span className="text-red-600">N/A</span>
             )}
@@ -237,7 +286,9 @@ const AdminProductsPage = () => {
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
           >
+            <MdOutlineDateRange />
             Added at
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
@@ -259,7 +310,7 @@ const AdminProductsPage = () => {
               <div className="text-slate-500 font-medium text-xs">{time}</div>
             </div>
             ) : (
-              <span className="text-red-800">N/A</span>
+              <span className="text-red-600">N/A</span>
             )}
           </>
         );
@@ -272,7 +323,9 @@ const AdminProductsPage = () => {
           <Button
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
           >
+            <MdOutlineDateRange />
             Updated at
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
@@ -294,7 +347,7 @@ const AdminProductsPage = () => {
                 <div className="text-slate-500 font-medium text-xs">{time}</div>
               </div>
             ) : (
-              <span className="text-red-800">N/A</span>
+              <span className="text-red-600">N/A</span>
             )}
           </>
         );
