@@ -36,7 +36,7 @@ const header = () => {
   ];
   return (
     <aside className="h-full w-full">
-      <p className="flex justify-center text-xl text-orange-600 select-none py-1 gap-x-1">
+      <p className="flex justify-center text-xl text-gray-400 select-none py-1 gap-x-1">
         <MdOutlineAdminPanelSettings className="text-3xl" />
         Shop Admin Panel
       </p>
@@ -46,7 +46,7 @@ const header = () => {
             key={item?.title}
             className={
               pathname === item.path
-                ? "bg-main-bg rounded-l-xl w-full py-2"
+                ? "bg-gray-300 rounded-l-xl w-full py-3"
                 : "w-full py-2"
             }
           >
@@ -54,11 +54,11 @@ const header = () => {
               href={item.path}
               className={
                 pathname === item.path
-                  ? "flex justify-start text-md items-center gap-x-2 text-black ml-4"
-                  : "flex justify-start text-md items-center gap-x-2 text-slate-100 ml-4"
+                  ? "flex justify-start items-center gap-x-2 ml-4 font-semibold text-sm"
+                  : "flex justify-start text-sm font-semibold items-center gap-x-2 ml-4"
               }
             >
-              <LabelIcon className="text-xl">{item.icon}</LabelIcon>
+              <LabelIcon className="text-xl ">{item.icon}</LabelIcon>
 
               {item.title}
             </Link>

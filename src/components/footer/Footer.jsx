@@ -87,7 +87,7 @@ const Footer = () => {
                 <Link href="/">Home</Link>
               </li>
               <li className="text-lg font-medium hover:text-orange-600">
-                <Link href="#">Cart</Link>
+                <Link href="/cart">Cart</Link>
               </li>
               <li className="text-lg font-medium hover:text-orange-600">
                 <Link href="/about">About</Link>

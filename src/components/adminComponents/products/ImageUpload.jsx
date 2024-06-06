@@ -1,18 +1,19 @@
-"use Client"
+"use Client";
 
 //file in encoded to base64 and saved it as a url in local storage to use in different pages in local machine
 // Here in this file upload, i have not sent and saved image in backend, instead i used fileReader api and saved imagee on local storage, seleted them and created url of them, and passed that url to the backend, which makes the file uploading work only on my local machine.
 // : Added a readFileAsDataURL function that reads the file as a data URL (base64 encoded string).
 //  Modified the handleDragAndDropProductPicturesChange and handleDragAndDropProductPicturesDrop functions to store the base64 URLs. The component now loads these URLs from local storage when it mounts and saves the updated URLs back to local storage whenever fileUrls changes.
 // Added two useEffect hooks: one for loading the images from local storage when the component mounts, and another for saving the images to local storage whenever the fileUrls state changes.
-import React from 'react';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
-import Image from 'next/image';
+import React from "react";
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import Image from "next/image";
 import { Label } from "@/components/ui/label";
-import DragAndDropIcon from '@/../../public/assets/images/dragAndDrop.png'; // Adjust the import path accordingly
+import DragAndDropIcon from "@/../../public/assets/images/dragAndDrop.png"; // Adjust the import path accordingly
 
 const ImageUpload = ({ formik, forUpdateModal }) => {
-  const [dragAndDropProductPictures, setDragAndDropProductPictures] = React.useState([]);
+  const [dragAndDropProductPictures, setDragAndDropProductPictures] =
+    React.useState([]);
   const [fileUrls, setFileUrls] = React.useState(forUpdateModal || []);
 
   const readFileAsDataURL = (file) => {
@@ -28,7 +29,9 @@ const ImageUpload = ({ formik, forUpdateModal }) => {
     const files = e.target.files;
     if (files.length > 0) {
       const newFiles = Array.from(files);
-      const urls = await Promise.all(newFiles.map((file) => readFileAsDataURL(file)));
+      const urls = await Promise.all(
+        newFiles.map((file) => readFileAsDataURL(file))
+      );
       setDragAndDropProductPictures((prevFiles) => [...prevFiles, ...newFiles]);
       setFileUrls((prevUrls) => [...prevUrls, ...urls]);
     }
@@ -52,34 +55,36 @@ const ImageUpload = ({ formik, forUpdateModal }) => {
     const files = event.dataTransfer.files;
     if (files.length > 0) {
       const newFiles = Array.from(files);
-      const urls = await Promise.all(newFiles.map((file) => readFileAsDataURL(file)));
+      const urls = await Promise.all(
+        newFiles.map((file) => readFileAsDataURL(file))
+      );
       setDragAndDropProductPictures((prevFiles) => [...prevFiles, ...newFiles]);
       setFileUrls((prevUrls) => [...prevUrls, ...urls]);
     }
   };
 
   React.useEffect(() => {
-    formik.setFieldValue('image', fileUrls);
+    formik.setFieldValue("image", fileUrls);
   }, [fileUrls]);
 
   React.useEffect(() => {
     // Load images from local storage on component mount
-    const savedImages = JSON.parse(localStorage.getItem('savedImages') || '[]');
+    const savedImages = JSON.parse(localStorage.getItem("savedImages") || "[]");
     setFileUrls(savedImages);
   }, []);
 
   React.useEffect(() => {
     // Save images to local storage when fileUrls state changes
-    localStorage.setItem('savedImages', JSON.stringify(fileUrls));
+    localStorage.setItem("savedImages", JSON.stringify(fileUrls));
   }, [fileUrls]);
 
   return (
     <div className="mt-5">
-      <div className="font-medium text-orange-600 border-b border-b-slate-400/70 pb-2">Upload</div>
+      <div className="font-medium">Upload</div>
       <div
         onDragOver={handleDragOver}
         onDrop={handleDragAndDropProductPicturesDrop}
-        className="mt-2 border border-solid border-black rounded-[5px] h-40 flex items-center justify-center relative"
+        className="mt-4 border border-solid border-slate-400/50 rounded-[5px] h-36 flex items-center justify-center relative"
       >
         <input
           type="file"
@@ -114,15 +119,14 @@ const ImageUpload = ({ formik, forUpdateModal }) => {
               className="py-2 mt-2 px-3 border rounded-lg flex items-center"
             >
               <span className="mr-3 text-sm">{index + 1}.</span>
-              <img
-                src={url}
-                alt="File"
-                className="w-12 h-12 object-cover"
-              />
+              <img src={url} alt="File" className="w-12 h-12 object-cover" />
               <div className="flex-1 ml-3">
-                <p className="text-sm">{dragAndDropProductPictures[index]?.name}</p>
+                <p className="text-sm">
+                  {dragAndDropProductPictures[index]?.name}
+                </p>
                 <p className="text-xs text-gray-600">
-                  {Math.round(dragAndDropProductPictures[index]?.size / 1024)} KB
+                  {Math.round(dragAndDropProductPictures[index]?.size / 1024)}{" "}
+                  KB
                 </p>
               </div>
               <AiOutlineCloseCircle
@@ -133,7 +137,7 @@ const ImageUpload = ({ formik, forUpdateModal }) => {
           ))}
         </div>
       ) : (
-        <div className="text-gray-500 text-sm">No files selected</div>
+        <div className="text-gray-500 text-sm mt-2">No files selected</div>
       )}
     </div>
   );
@@ -141,11 +145,7 @@ const ImageUpload = ({ formik, forUpdateModal }) => {
 
 export default ImageUpload;
 
-
 //  *********Use this when there is a server which accepts a file*********
-
-
-
 
 // import React from 'react';
 // import { AiOutlineCloseCircle } from "react-icons/ai";

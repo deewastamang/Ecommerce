@@ -32,15 +32,20 @@ export const calculatePercentage = (oldPrice, price) => {
 
 export const dateFormatter = (dateString) => {
   const date = new Date(dateString);
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true, // To use 12-hour format with AM/PM
-    timeZoneName: 'short' // Include timezone
-  };
-  return date.toLocaleString('ne-NP', options)
+  
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(date.getUTCDate()).padStart(2, '0');
+
+  let hours = date.getUTCHours();
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12; // Convert to 12-hour format
+  const formattedHours = String(hours).padStart(2, '0');
+  
+  const formattedDate = `${year}-${month}-${day}`;
+  const formattedTime = `${formattedHours}:${minutes}:${seconds} ${ampm}`;
+  
+  return `${formattedDate} ${formattedTime} UTC`;
 }

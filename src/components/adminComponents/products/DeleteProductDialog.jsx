@@ -48,7 +48,6 @@ const DeleteProductDialog = ({
     <AlertDialog open={isOpen} onOpenChange={closeDeleteModal}>
       {" "}
       {/** onOpenChange is needed and triggers automatically when pressed some closing button in modal */}
-      {/* <AlertDialogTrigger>Delete</AlertDialogTrigger> */}
       <AlertDialogContent className="bg-white ">
         <AlertDialogHeader>
           <AlertDialogTitle>

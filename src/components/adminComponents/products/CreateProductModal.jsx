@@ -85,13 +85,13 @@ const CreateProductModal = ({ refetch, isOpen, closeCreateModal }) => {
   });
 
   const fieldStyleClass =
-    "col-span-3 flex h-10 w-full rounded-[5px] border border-input bg-background px-2 py-1.5 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-orange-600 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+    "col-span-3 flex h-10 w-full rounded-[5px] border border-gray-400/50 bg-gray-300 px-2 py-1.5 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-orange-600 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
-    <Sheet open={isOpen}>
-      <SheetContent className="bg-slate-100 overflow-y-auto">
+    <Sheet open={isOpen} onOpenChange={closeCreateModal}>  {/**onOpenChange is a must to add if you want functionality of closing modal when clicking outside of the modal's boundary and cross icon */}
+      <SheetContent className="bg-slate-200 min-w-[40vw] overflow-y-auto">
         <SheetHeader className="border-b-[1px] border-b-slate-300 pb-2">
-          <SheetTitle className="text-orange-600">
+          <SheetTitle className="text-black/80">
             Create a New Product
           </SheetTitle>
         </SheetHeader>
@@ -207,18 +207,18 @@ const CreateProductModal = ({ refetch, isOpen, closeCreateModal }) => {
                   border: `1px solid gray `,
                   height: "100%",
                   backgroundColor: state.isSelected
-                    ? "#D97706"
+                    ? "#9CA3AF"
                     : base.backgroundColor,
                   "&:hover": {
-                    backgroundColor: "#F59E0B",
+                    backgroundColor: "gray",
                   },
                 }),
                 control: (base, state) => ({
                   ...base,
-                  backgroundColor: "white",
+                  backgroundColor: "#D1D5DB",
                   border: state.isFocused
                     ? "1px solid #D97706"
-                    : "1px solid black",
+                    : "1px solid #9CA3AF",
                   width: "100%",
                   boxShadow: "none",
                   "&:hover": {

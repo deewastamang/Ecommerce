@@ -37,13 +37,13 @@ import { Badge } from "@/components/ui/badge";
 
 const AdminProductsPage = () => {
   const { data: products, error, isLoading, refetch } = useGetProductsQuery();
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
 
   const handleDeleteRowClick = (product) => {
     setSelectedRow(product);
-    setDeleteModalOpen(true);
+    setIsDeleteModalOpen(true);
   };
   const handleEditRowClick = (product) => {
     setSelectedRow(product);
@@ -271,9 +271,9 @@ const AdminProductsPage = () => {
         return (
           <>
             {inStock > 0 ? (
-              <span className="text-green-700">{inStock}</span>
+              <span className="text-green-700 font-medium">{inStock}</span>
             ) : (
-              <span className="text-red-600">N/A</span>
+              <span className="text-red-600 font-medium">N/A</span>
             )}
           </>
         );
@@ -306,11 +306,11 @@ const AdminProductsPage = () => {
           <>
             {dateString ? (
               <div className="flex flex-col ">
-              <div className="font-semibold text-black">{date}</div>
+              <div className="font-medium text-black">{date}</div>
               <div className="text-slate-500 font-medium text-xs">{time}</div>
             </div>
             ) : (
-              <span className="text-red-600">N/A</span>
+              <span className="text-red-600 font-medium">N/A</span>
             )}
           </>
         );
@@ -343,11 +343,11 @@ const AdminProductsPage = () => {
           <>
             {dateString ? (
               <div className="flex flex-col ">
-                <div className="font-semibold text-black">{date}</div>
+                <div className="font-medium text-black">{date}</div>
                 <div className="text-slate-500 font-medium text-xs">{time}</div>
               </div>
             ) : (
-              <span className="text-red-600">N/A</span>
+              <span className="text-red-600 font-medium">N/A</span>
             )}
           </>
         );
@@ -403,7 +403,7 @@ const AdminProductsPage = () => {
       <DeleteProductDialog
         isOpen={isDeleteModalOpen}
         selectedRow={selectedRow}
-        closeDeleteModal={() => setDeleteModalOpen(false)}
+        closeDeleteModal={() => setIsDeleteModalOpen(false)}
         refetch={refetch}
       />
       <DataTable data={products?.data} columns={columns} refetch={refetch} />

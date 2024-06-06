@@ -10,8 +10,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import {toast} from "sonner"
+import unknownUserIcon from "@/../../public/assets/images/unknownUser.png"
+import { usePathname } from "next/navigation";
 
 const ProfileDropDown = ({ user }) => {
+  const pathname = usePathname();
     const handleSignOut = () => {
         signOut();
         toast.success("Logged Out successfully", {
@@ -26,19 +29,19 @@ const ProfileDropDown = ({ user }) => {
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none">
         <Image
-          className="rounded-full object-cover"
-          src={user.image}
+          className="rounded-full object-cover bg-slate-400/20"
+          src={user?.image || unknownUserIcon}
           alt="profile image"
           width={50}
           height={50}
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='bg-slate-200/90 rounded-[4px]'>
+      <DropdownMenuContent className='bg-slate-200/80 rounded-[4px]'>
         <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem><Link href="/profile" className="w-full">Profile</Link></DropdownMenuItem>
-        <DropdownMenuItem><Link href="/wishlist" className="w-full">Wishlist</Link></DropdownMenuItem>
-        <DropdownMenuItem><Link href="/order" className="w-full">Order</Link></DropdownMenuItem>
+        <DropdownMenuItem className=""><Link href="/profile" className={pathname === "/profile" ? "text-orange-600" : "w-full hover:text-orange-400"}>Profile</Link></DropdownMenuItem>
+        <DropdownMenuItem><Link href="/wishlist" className={pathname === "/wishlist" ? "text-orange-600" : "w-full hover:text-orange-400"}>Wishlist</Link></DropdownMenuItem>
+        <DropdownMenuItem><Link href="/order" className={pathname === "/order" ? "text-orange-600" : "w-full hover:text-orange-400"}>Order</Link></DropdownMenuItem>
         <DropdownMenuItem>Theme: Light</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem  onClick={handleSignOut}>Log Out</DropdownMenuItem>
