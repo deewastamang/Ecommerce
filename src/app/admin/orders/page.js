@@ -1,8 +1,11 @@
+"use client";
 import React from 'react'
 
 const AdminOrdersPage = () => {
   return (
-    <div>AdminOrdersPage</div>
+    <div>
+      or
+    </div>
   )
 }
 

@@ -6,7 +6,7 @@ import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { AiOutlineProduct } from "react-icons/ai";
 import { FaTasks } from "react-icons/fa";
-import { CiSettings } from "react-icons/ci";
+import { FiSettings } from "react-icons/fi";
 import LabelIcon from "./LabelIcon";
 
 const header = () => {
@@ -31,7 +31,7 @@ const header = () => {
     {
       title: "Settings",
       path: "/admin/settings",
-      icon: <CiSettings />,
+      icon: <FiSettings />,
     },
   ];
   return (
@@ -47,7 +47,7 @@ const header = () => {
             className={
               pathname === item.path
                 ? "bg-gray-300 rounded-l-xl w-full py-3"
-                : "w-full py-2"
+                : "w-full py-3"
             }
           >
             <Link
