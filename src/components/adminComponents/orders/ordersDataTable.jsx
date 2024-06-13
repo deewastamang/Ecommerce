@@ -121,6 +121,7 @@ export default function DataTable({ columns, data, refetch, mode }) {
         <Input
           placeholder="Search for a product..."
           value={table.getColumn("title")?.getFilterValue() ?? ""}
+          disabled={mode === "user"}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }

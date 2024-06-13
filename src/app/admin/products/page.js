@@ -36,6 +36,7 @@ import { dateFormatter } from "@/helper";
 import { Badge } from "@/components/ui/badge";
 
 const AdminProductsPage = () => {
+  document.title = "Admin | Products"
   const { data: products, error, isLoading, refetch } = useGetProductsQuery();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);

@@ -38,6 +38,7 @@ import Loading from "@/app/loading";
 import GlobalError from "@/app/global-error";
 
 const AdminOrdersPage = () => {
+  document.title = "Admin | Orders"
   const {
     data: ordersByProduct,
     isLoading: ordersByProductisLoading,
@@ -339,7 +340,7 @@ const AdminOrdersPage = () => {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="flex gap-x-1"
           >
-            <IoKeyOutline />
+            <MdOutlineDescription />
             Orders Made
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>

@@ -5,6 +5,7 @@ import React from 'react'
 
 
 const DashboardPage = () => {
+  document.title = "Admin | Dashboard"
     const {data: session} = useSession();
   return (
     <Container className="sm:py-4">
