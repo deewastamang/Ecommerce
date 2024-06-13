@@ -2,50 +2,6 @@ import { NextResponse } from "next/server";
 import { UserOrderModel } from "@/lib/models/userOrderModel";
 import { connectToDb } from "@/lib/dbConnection";
 
-// export const GET = async () => {
-//   try {
-//     await connectToDb();
-//     const allOrders = await UserOrderModel.find({});
-
-//     if (!allOrders || allOrders.length === 0) {
-//       return NextResponse.json({
-//         success: true,
-//         msg: "No any orders currently",
-//         data: [],
-//       });
-//     }
-
-//     const sortedOrders = allOrders.reduce((accumulator, orderData) => {
-//         orderData.orders.forEach((order, index) => {
-//             let existingorder = accumulator.find((item) => item._id === order._id)
-//             if(existingorder) {
-//                 accumulator[index].totalQuantity += order.quantity;
-//             } else {
-//                 accumulator.push({...order, totalQuantity: order.quantity})
-//             }
-//             return accumulator.push(order)
-//         })
-//         return accumulator;
-//     },[])
-//     console.log("sorted orders : ", sortedOrders);
-//     return NextResponse.json({
-//       msg: "orderData fetched successfully",
-//       success: true,
-//       data: sortedOrders,
-//     });
-//   } catch (error) {
-//     return NextResponse.json(
-//       {
-//         success: false,
-//         msg: `product loading error: ${error.message}`,
-//       },
-//       {
-//         status: 400,
-//       }
-//     );
-//   }
-// };
-
 export const GET = async () => {
   try {
     await connectToDb();
@@ -59,20 +15,33 @@ export const GET = async () => {
       });
     }
 
-    const sortedOrders = allOrders
-      .flatMap((orderData) => orderData.orders)
-      .reduce((accumulator, order) => {
-        const existingOrder = accumulator.find(item => item._id.toString() === order._id.toString())
+    const sortedOrders = allOrders.reduce((accumulator, orderData) => {
+      orderData.orders.forEach((order) => {
+        const existingOrder = accumulator.find(
+          (item) => item._id?.toString() === order._id?.toString()
+        );
         if (existingOrder) {
-            console.log("this item is repetated: ", existingOrder.title)
           existingOrder.totalQuantity += order.quantity;
+          const existingCustomer = existingOrder.orderedByUsers.find(
+            user => user.userId?.toString() === orderData.userId?.toString()
+          );
+          if(!existingCustomer) {
+            existingOrder.orderedByUsers.push(orderData.userId)
+          }
         } else {
-          accumulator.push({ ...order, totalQuantity: order.quantity });
+          accumulator.push({
+            _id: order._id,
+            title: order.title,
+            price: order.price,
+            oldPrice: order.oldPrice,
+            totalQuantity: order.quantity,
+            orderedByUsers: [orderData.userId],
+          });
         }
-        return accumulator;
-      }, []);
+        });
+      return accumulator;
+    },[]);
 
-    console.log("sorted orders: ", sortedOrders);
     return NextResponse.json({
       msg: "orderData fetched successfully",
       success: true,

@@ -23,7 +23,7 @@ const OrderDetails = () => {
     setTotalPrice(totalPrice)
   },[orderData])
 
-  if(orderData?.data?.orders?.length === 0 || orderData?.data === null || error) {
+  if(orderData?.data?.length === 0 || orderData?.data === null || error ) {
     return (
       <div className="flex flex-col gap-y-6 items-center justify-center h-96 px-4">
       <p className="text-4xl text-orange-600 font-medium tracking-wide w-full p-2 text-center ">
@@ -75,6 +75,7 @@ const OrderDetails = () => {
           </div>
         ))}
       </div>
+
       <div className="mt-4">
         <p className="font-medium">Status: <span className="bg-orange-600 text-white rounded-full px-3 py-1">{orderData?.data?.status}</span></p>
       </div>
