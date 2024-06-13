@@ -19,6 +19,7 @@ module.exports = {
     extend: {
       fontFamily: {
         urbanist: ["urbanist", "sans"],
+        roboto: ["roboto", "sans-serif"],
       },
       backgroundImage: {
         "main-bg": "url('/assets/images/bg-img.jpeg')",

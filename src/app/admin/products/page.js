@@ -87,7 +87,7 @@ const AdminProductsPage = () => {
             className="flex gap-x-1"
           >
             <IoKeyOutline />
-            ID
+            Product ID
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -111,8 +111,6 @@ const AdminProductsPage = () => {
             </TooltipProvider>
           </>
         );
-        // const title = getValue();
-        // return <span className="font-medium"><Badge variant="adminTable"><ImFilesEmpty className="mr-2" /> {title.substring(0,5)}</Badge></span>;
       },
     },
     {

@@ -5,6 +5,7 @@ import { persistReducer } from "redux-persist";
 import { productSlice } from "./productSlice/product.slice";
 import { orderSlice } from "./orderSlice/order.slice";
 import { authSlice } from "./authSlice/auth.slice";
+import { orderForAdminSlice } from "./orderForAdminSlice/orderForAdmin.slice";
 // slice import
 import shoppingReducer from "./shoppingSlice/shopping.slice";
 import createWebStorage from "redux-persist/es/storage/createWebStorage";
@@ -42,16 +43,17 @@ export const rootReducer = combineReducers({
   [productSlice.reducerPath]: productSlice.reducer,
   [orderSlice.reducerPath]: orderSlice.reducer,
   [authSlice.reducerPath]: authSlice.reducer,
+  [orderForAdminSlice.reducerPath]: orderForAdminSlice.reducer,
 });
 
 //add middleware from api slices for rtk query
-export const rootApiMiddleware = [productSlice.middleware, orderSlice.middleware, authSlice.middleware];
+export const rootApiMiddleware = [productSlice.middleware, orderSlice.middleware, authSlice.middleware, orderForAdminSlice.middleware];
 
 const persistConfig = {
     key: "root",
     version: 1,
     storage,
-    blacklist: [productSlice.reducerPath, orderSlice.reducerPath, authSlice.reducerPath], //not persisting this api slice
+    blacklist: [productSlice.reducerPath, orderSlice.reducerPath, authSlice.reducerPath, orderForAdminSlice.reducerPath], //not persisting this api slice
   };
 
 //to persist reducer data

@@ -12,3 +12,8 @@
   font-family: 'urbanist';
   src: url('@/../../../public/assets//fonts/urbanist.woff2');
 }
+
+@font-face {
+  font-family: 'roboto';
+  src: url('@/../../../public/assets//fonts/Roboto-Regular.ttf');
+}
