@@ -8,6 +8,12 @@ const userOrderSchema = new mongoose.Schema({
         ref: 'user',
         required: true,
       },
+    userName: {
+        type: String,
+    },
+    userEmail: {
+        type: String,
+    },
     orders: {
         type: [productSchema],
         default: [],

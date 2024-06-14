@@ -13,11 +13,11 @@ const PaymentForm = () => {
   const { products, totalPrice, userInfo } = useSelector(
     (state) => state?.shopping
   );
+
   //==========stripe payment starts here=====================
   const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   );
-
   const handleCheckout = async () => {
     try {
       if(!session) {
@@ -26,6 +26,7 @@ const PaymentForm = () => {
       const stripe = await stripePromise;
       const userEmail = session?.user?.email;
       const userId = session?.user?.userId;
+      const userName = session?.user?.name;
 
       const response = await fetch("http://localhost:3000/api/checkout", {
         method: "POST",
@@ -54,6 +55,8 @@ const PaymentForm = () => {
         userId: userId,
         orders: products,
         stripeSessionId: result.data.id,
+        userEmail: userEmail,
+        userName: userName,
       }
       const createOrderResult = await createOrder(payload);
       if (createOrderResult.success) {

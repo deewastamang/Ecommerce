@@ -52,7 +52,7 @@ const AdminOrdersPage = () => {
     refetch: ordersByUserRefetch,
   } = useGetOrdersByUserForAdminQuery();
 
-  const [orderMode, setOrderMode] = useState("product");
+  const [orderMode, setOrderMode] = useState("user");
 
   useEffect(() => {
     ordersByProductRefetch();
@@ -328,6 +328,46 @@ const AdminOrdersPage = () => {
             </TooltipProvider>
           </>
         );
+      },
+    },
+    {
+      accessorKey: "userName",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
+          >
+            <MdOutlineSubtitles className="text-lg" />
+            User's Name
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row, getValue }) => {
+        const userName = getValue();
+        return <span className=""> {userName || "N/A"}</span>;
+      },
+    },
+    {
+      accessorKey: "userEmail",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="flex gap-x-1"
+          >
+            <MdOutlineSubtitles className="text-lg" />
+            User's Email
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row, getValue }) => {
+        const userEmail = getValue();
+        return <span className=""> {userEmail || "N/A"}</span>;
       },
     },
 

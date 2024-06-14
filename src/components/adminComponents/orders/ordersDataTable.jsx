@@ -75,7 +75,6 @@ export default function DataTable({ columns, data, refetch, mode }) {
     setIsBulkDeleteModalOpen(true);
     return;
   };
-
   return (
     <div className="space-y-2 bg-gray-300 px-6">
       <CreateProductModal
@@ -119,11 +118,10 @@ export default function DataTable({ columns, data, refetch, mode }) {
           <IoMdSearch className="text-xl text-gray-500" />
         </span>
         <Input
-          placeholder="Search for a product..."
-          value={table.getColumn("title")?.getFilterValue() ?? ""}
-          disabled={mode === "user"}
+          placeholder={mode === 'product' ? "Search for a product..." : "Search for a user by email..."}
+          value={table.getColumn(mode === "product" ? "title" : "userEmail")?.getFilterValue() ?? ""}
           onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
+            table.getColumn(mode === "product" ? "title" : "userEmail")?.setFilterValue(event.target.value)
           }
           className="pl-10 pr-4 py-2 rounded-full w-full bg-gray-400/30 border border-gray-400/40 placeholder:text-slate-500"
         />
