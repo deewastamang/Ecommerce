@@ -30,7 +30,7 @@ import {
 import { dateFormatter } from "@/helper";
 import { Badge } from "@/components/ui/badge";
 
-import DataTable from "@/components/adminComponents/orders/ordersDataTable";
+import DataTable from "@/components/adminComponents/orders/OrdersDataTable";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -321,33 +321,13 @@ const AdminOrdersPage = () => {
                 </TooltipTrigger>
                 <TooltipContent className="w-60 bg-white rounded">
                   <p className="">
-                    Order is made by user with this id: {productId}
+                    <p className="font-semibold text-slate-500 mb-2 underline">Order is made by user with this id:</p> {productId}
                   </p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </>
         );
-      },
-    },
-    {
-      accessorKey: "userName",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="flex gap-x-1"
-          >
-            <MdOutlineSubtitles className="text-lg" />
-            User's Name
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row, getValue }) => {
-        const userName = getValue();
-        return <span className=""> {userName || "N/A"}</span>;
       },
     },
     {

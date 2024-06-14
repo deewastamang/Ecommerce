@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import CreateProductModal from "../products/CreateProductModal";
+import CreateOrderModal from "./CreateOrderModal";
 import BulkDeleteProductsModal from "../products/BulkDeleteProductsModal";
 
 export default function DataTable({ columns, data, refetch, mode }) {
@@ -77,7 +77,7 @@ export default function DataTable({ columns, data, refetch, mode }) {
   };
   return (
     <div className="space-y-2 bg-gray-300 px-6">
-      <CreateProductModal
+      <CreateOrderModal
         isOpen={isCreateModalOpen}
         closeCreateModal={() => setIsCreateModalOpen(false)}
         refetch={refetch}
