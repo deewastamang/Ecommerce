@@ -9,6 +9,7 @@ import {
 
 import { FaSquarePlus } from "react-icons/fa6";
 import { FaMinusSquare } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 
 import React, { useEffect, useState } from "react";
 
@@ -41,8 +42,7 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
     },
   ] = useCreateOrderMutation();
 
-  const [orderTempPlacement, setOrderTempPlacement] = useState([]);
-  const [orderSelectsLength, setOrderSelectsLength] = useState(1);
+  const [orderTempPlacement, setOrderTempPlacement] = useState([{}]);
   const initialValues = {
     userId: "",
     userEmail: "",
@@ -85,7 +85,12 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         // setSubmitting(true);
-        values.orders = orderTempPlacement.filter(order => order !== undefined);
+        values.orders = orderTempPlacement.filter(
+          (order) =>
+            order !== undefined &&
+            Object.keys(order).length !== 0 &&
+            Object.keys(order).includes("_id")
+        );
         // const res = await createOrder(values);
         // if (res.data.success) {
         //   toast.success(`Order is added successfully`);
@@ -224,7 +229,7 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               >
                 <p>Orders</p>
                 <div className="flex gap-x-1">
-                  {orderSelectsLength > 1 && (
+                  {/* {orderSelectsLength > 1 && (
                     <span
                       onClick={() => {
                         setOrderTempPlacement((prev) => prev.slice(0, -1));
@@ -234,9 +239,11 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
                     >
                       <FaMinusSquare className="text-2xl" />
                     </span>
-                  )}
+                  )} */}
                   <span
-                    onClick={() => setOrderSelectsLength((p) => p + 1)}
+                    onClick={() =>
+                      setOrderTempPlacement((prev) => [...prev, {}])
+                    }
                     className="cursor-pointer"
                   >
                     <FaSquarePlus className="text-2xl" />
@@ -250,9 +257,14 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               >
                 Quantity
               </Label>
+              <Label className="invisible">
+                {" "}
+                {/** Only using to align with input fields */}
+                <RxCross2 className="text-2xl" />
+              </Label>
             </div>
 
-            {Array.from({ length: orderSelectsLength }).map((_, i) => (
+            {orderTempPlacement.map((_, i) => (
               <div key={i} className="flex gap-x-6">
                 <Select
                   name="orders"
@@ -270,10 +282,9 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
                       const newOrderTempPlacement = [...prev];
                       const checkIfAlreadyExists = newOrderTempPlacement.some(
                         (enteredOrder) => {
-                          return enteredOrder?._id === selectedOrder.value._id
+                          return enteredOrder?._id === selectedOrder.value._id;
                         }
                       );
-                      console.log('result this: ', checkIfAlreadyExists)
                       if (checkIfAlreadyExists) {
                         toast.error("Product is already selected");
                       } else {
@@ -296,20 +307,39 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
                     onChange={(e) => {
                       const value = parseInt(e.target.value, 10);
                       setOrderTempPlacement((prev) => {
-                        const newOrderTempPlacement = prev.map((order, index) => {
-                          if (index === i) {
-                            return {
-                              ...order,
-                              quantity: value || 1,
-                            };
+                        const newOrderTempPlacement = prev.map(
+                          (order, index) => {
+                            if (index === i) {
+                              return {
+                                ...order,
+                                quantity: value || 1,
+                              };
+                            }
+                            return order;
                           }
-                          return order;
-                        });
+                        );
                         return newOrderTempPlacement;
                       });
                     }}
                   />
                 </div>
+                <span
+                  className="flex items-center cursor-pointer hover:text-red-600"
+                  onClick={() => {
+                    setOrderTempPlacement((prev) => {
+                      const newOrderTempPlacement = prev.filter(
+                        (_, index) => index !== i
+                      );
+                      if (newOrderTempPlacement.length < 1) {
+                        return [{}];
+                      } else {
+                        return newOrderTempPlacement;
+                      }
+                    });
+                  }}
+                >
+                  <RxCross2 className="text-2xl" />
+                </span>
               </div>
             ))}
 
