@@ -18,24 +18,28 @@ const BulkDeleteOrderDataModal = ({
   selectedRows,
   closeDeleteModal,
   refetch,
-  emptySelectedRows
+  emptySelectedRows,
 }) => {
-    const [bulkDeleteOrderData, {isLoading: isDeleting, isSuccess, isError, error: bulkDeleteError}] = useBulkDeleteOrderDataMutation();
+  const [
+    bulkDeleteOrderData,
+    { isLoading: isDeleting, isSuccess, isError, error: bulkDeleteError },
+  ] = useBulkDeleteOrderDataMutation();
 
   const handleBulkDelete = async () => {
     try {
       const res = await bulkDeleteOrderData(selectedRows).unwrap();
-      if(!res.success) {
-        console.error("Failed to delete order data ", res.msg)
+      if (!res.success) {
+        console.error("Failed to delete order data ", res.msg);
       }
-      toast.success(`Selected ${selectedRows.length} order data have been deleted`);
-      refetch(); 
+      toast.success(
+        `Selected ${selectedRows.length} order data have been deleted`
+      );
+      refetch();
       emptySelectedRows();
     } catch (error) {
-      toast.error('Failed to delete order data');
+      toast.error("Failed to delete order data");
     }
-  }
-
+  };
 
   return (
     <AlertDialog open={isOpen} onOpenChange={closeDeleteModal}>
@@ -53,6 +57,7 @@ const BulkDeleteOrderDataModal = ({
           <AlertDialogAction
             onClick={handleBulkDelete}
             className="bg-black text-white rounded-[5px] hover:bg-orange-600 duration-200"
+            disabled={isLoading}
           >
             Delete
           </AlertDialogAction>
