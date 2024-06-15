@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/sheet";
 
 import { FaSquarePlus } from "react-icons/fa6";
-import { FaMinusSquare } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 
 import React, { useEffect, useState } from "react";
@@ -174,9 +173,8 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               styles={selectFieldStyle}
               options={userOptions}
               value={userOptions?.find(
-                //stores boolean value
                 (option) => option.userId === formik.values.userId
-              )}
+              ) || ""}
               onChange={(selectedUser) => {
                 formik.setFieldValue("userId", selectedUser.userId);
                 formik.setFieldValue("userEmail", selectedUser.userEmail);
@@ -229,17 +227,6 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               >
                 <p>Orders</p>
                 <div className="flex gap-x-1">
-                  {/* {orderSelectsLength > 1 && (
-                    <span
-                      onClick={() => {
-                        setOrderTempPlacement((prev) => prev.slice(0, -1));
-                        setOrderSelectsLength((prev) => prev - 1);
-                      }}
-                      className="cursor-pointer"
-                    >
-                      <FaMinusSquare className="text-2xl" />
-                    </span>
-                  )} */}
                   <span
                     onClick={() =>
                       setOrderTempPlacement((prev) => [...prev, {}])
@@ -264,7 +251,7 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               </Label>
             </div>
 
-            {orderTempPlacement.map((_, i) => (
+            {orderTempPlacement.map((order, i) => (
               <div key={i} className="flex gap-x-6">
                 <Select
                   name="orders"
@@ -275,8 +262,8 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
                   styles={selectFieldStyle}
                   options={orderOptions}
                   value={orderOptions?.find(
-                    (option) => option.value === orderTempPlacement[i]
-                  )}
+                    (option) => option.value._id === order._id
+                  ) || ""}
                   onChange={(selectedOrder) => {
                     setOrderTempPlacement((prev) => {
                       const newOrderTempPlacement = [...prev];
@@ -303,7 +290,7 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
                     type="number"
                     id="productQuantity"
                     className={fieldStyleClass}
-                    value={orderTempPlacement[i]?.quantity || 1}
+                    value={orderTempPlacement[i].quantity || ""}
                     onChange={(e) => {
                       const value = parseInt(e.target.value, 10);
                       setOrderTempPlacement((prev) => {
@@ -312,7 +299,7 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
                             if (index === i) {
                               return {
                                 ...order,
-                                quantity: value || 1,
+                                quantity: value,
                               };
                             }
                             return order;
