@@ -57,7 +57,7 @@ const BulkDeleteOrderDataModal = ({
           <AlertDialogAction
             onClick={handleBulkDelete}
             className="bg-black text-white rounded-[5px] hover:bg-orange-600 duration-200"
-            disabled={isLoading}
+            disabled={isDeleting}
           >
             Delete
           </AlertDialogAction>
