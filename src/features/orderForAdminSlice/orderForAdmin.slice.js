@@ -23,7 +23,13 @@ export const orderForAdminSlice = createApi({
         method: "PUT",
         body: updatedOrderData,
       })
-    })
+    }),
+    deleteSingleOrderData: builder.mutation({
+      query: (_id) => ({
+        url: `/orders/${_id}`,
+        method: "DELETE",
+      })
+    }),
   }),
 });
 
@@ -32,4 +38,5 @@ export const {
   useGetOrdersByUserForAdminQuery,
   useGetAllUsersQuery,
   useUpdateOrderDataMutation,
+  useDeleteSingleOrderDataMutation
 } = orderForAdminSlice;

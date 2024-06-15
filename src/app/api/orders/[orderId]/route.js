@@ -35,3 +35,29 @@ export const PUT = async (req, { params }) => {
     }
   };
   
+
+  export const DELETE = async (req, { params }) => {
+    try {
+      await connectToDb();
+      const _id = params.orderId;
+      const checkExistence = await UserOrderModel.findOne({ _id });
+      if (!checkExistence) {
+        throw new Error("Order data not found");
+      }
+      const foo = await UserOrderModel.deleteOne({ _id }); // output of foo: { acknowledged: true, deletedCount: 1 }
+      return NextResponse.json({
+        success: true,
+        msg: "Order Data has been deleted successfully",
+      });
+    } catch (error) {
+      return NextResponse.json(
+        {
+          success: false,
+          msg: `Order data loading error: ${error.message}`,
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+  };

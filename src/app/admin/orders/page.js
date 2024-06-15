@@ -37,6 +37,7 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import Loading from "@/app/loading";
 import GlobalError from "@/app/global-error";
+import DeleteOrderModal from "@/components/adminComponents/orders/DeleteOrderModal";
 
 const AdminOrdersPage = () => {
   document.title = "Admin | Orders"
@@ -55,6 +56,7 @@ const AdminOrdersPage = () => {
   const [orderMode, setOrderMode] = useState("user");
   const [selectedRow, setSelectedRow] = useState({});
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     ordersByProductRefetch();
@@ -65,6 +67,11 @@ const AdminOrdersPage = () => {
     setSelectedRow(orderData);
     setEditModalOpen(true);
   };
+
+  const handleDeleteRowClick = (orderData) => {
+    setSelectedRow(orderData);
+    setIsDeleteModalOpen(true);
+  }
 
   const columnsForProductMode = [
     {
@@ -599,6 +606,13 @@ const AdminOrdersPage = () => {
         isOpen={editModalOpen}
         selectedRow={selectedRow}
         closeEditModal={() => setEditModalOpen(false)}
+        refetch={ordersByUserRefetch}
+      />
+
+      <DeleteOrderModal 
+        isOpen={isDeleteModalOpen}
+        selectedRow={selectedRow}
+        closeDeleteModal={() => setIsDeleteModalOpen(false)}
         refetch={ordersByUserRefetch}
       />
 
