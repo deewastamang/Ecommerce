@@ -230,7 +230,6 @@ const CreateProductModal = ({ refetch, isOpen, closeCreateModal }) => {
               }}
               options={categoryOptions}
               value={categoryOptions?.find(
-                //stores boolean value
                 (option) => option.value === formik.values.category
               )}
               onChange={(value) => {
@@ -251,7 +250,7 @@ const CreateProductModal = ({ refetch, isOpen, closeCreateModal }) => {
 
           <div className="flex justify-center py-4 items-center md:justify-end gap-x-2">
             <Button type="submit" disabled={isLoading} variant="primary">
-              Save changes
+              Save
             </Button>
             <div
               className="border border-input bg-background rounded-[5px] hover:bg-orange-600 hover:text-white duration-200 px-4 py-2 flex items-center cursor-pointer text-sm"

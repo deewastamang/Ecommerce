@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { FaSquarePlus } from "react-icons/fa6";
+import { FaMinusSquare } from "react-icons/fa";
 
 import React, { useEffect, useState } from "react";
 
@@ -15,24 +16,39 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useFormik } from "formik";
 import { toast } from "sonner";
-import ImageUpload from "../products/ImageUpload";
 import Select from "react-select";
 import { useGetAllUsersQuery } from "@/features/orderForAdminSlice/orderForAdmin.slice";
 import { useGetProductsQuery } from "@/features/productSlice/product.slice";
+import { useCreateOrderMutation } from "@/features/orderSlice/order.slice";
 
 const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
-  const {data: allUsers, isLoading: usersIsLoading, error: userError} = useGetAllUsersQuery();
-  const {data: allProducts, isLoading: productsIsLoading, error: productsError} = useGetProductsQuery();
+  const {
+    data: allUsers,
+    isLoading: usersIsLoading,
+    error: userError,
+  } = useGetAllUsersQuery();
+  const {
+    data: allProducts,
+    isLoading: productsIsLoading,
+    error: productsError,
+  } = useGetProductsQuery();
+  const [
+    createOrder,
+    {
+      isLoading: orderIsSubmitting,
+      isSuccess: orderIsSuccess,
+      isError: orderSubmissionFailed,
+    },
+  ] = useCreateOrderMutation();
 
-
-  const [temp, setTemp] = useState(null);
+  const [orderTempPlacement, setOrderTempPlacement] = useState([]);
+  const [orderSelectsLength, setOrderSelectsLength] = useState(1);
   const initialValues = {
     userId: "",
     userEmail: "",
     userName: "",
     stripeSessionId: "",
     status: "",
-    wishlist: [],
     orders: [],
   };
 
@@ -49,23 +65,19 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
       label: "Canceled",
       value: "canceled",
     },
-  ]
+  ];
 
-  const userOptions = allUsers?.data?.map(user => (
-    {
-      label: `${user.email} (${user.name})`,
-      userId: user._id,
-      userEmail: user.email,
-      userName: user.name,
-    }
-  ));
+  const userOptions = allUsers?.data?.map((user) => ({
+    label: `${user.email} (${user.name})`,
+    userId: user._id,
+    userEmail: user.email,
+    userName: user.name,
+  }));
 
-  const orderOptions = allProducts?.data?.map(product => (
-    {
-      label: product.title,
-      value: product,
-    }
-  ))
+  const orderOptions = allProducts?.data?.map((product) => ({
+    label: product.title,
+    value: product,
+  }));
 
   const formik = useFormik({
     initialValues,
@@ -73,17 +85,17 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         // setSubmitting(true);
-        // const res = await createProduct(values);
+        values.orders = orderTempPlacement.filter(order => order !== undefined);
+        // const res = await createOrder(values);
         // if (res.data.success) {
-        //   toast.success(`Product ${res.data.data.title} is added successfully`);
+        //   toast.success(`Order is added successfully`);
         //   refetch();
         //   closeCreateModal();
         //   resetForm();
         // } else {
         //   throw new Error("Post method failed");
         // }
-        values.orders = [temp]
-        console.log('order values are: ', values);
+        console.log("order values are: ", values);
       } catch (error) {
         console.error("Failed to create product: ", error.message);
       } finally {
@@ -95,13 +107,33 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
   const fieldStyleClass =
     "flex h-10 w-11/12 rounded-[5px] border border-gray-400/50 bg-gray-300 px-2 py-1.5 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-orange-600 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
+  const selectFieldStyle = {
+    option: (base, state) => ({
+      ...base,
+      border: `1px solid gray `,
+      height: "100%",
+      backgroundColor: state.isSelected ? "#9CA3AF" : base.backgroundColor,
+      "&:hover": {
+        backgroundColor: "gray",
+      },
+    }),
+    control: (base, state) => ({
+      ...base,
+      backgroundColor: "#D1D5DB",
+      border: state.isFocused ? "1px solid #D97706" : "1px solid #9CA3AF",
+      width: "100%",
+      boxShadow: "none",
+      "&:hover": {
+        border: state.isFocused ? "1px solid #D97706" : "1px solid #D97706",
+      },
+    }),
+  };
+
   return (
-    <Sheet open={isOpen} onOpenChange={closeCreateModal}> 
+    <Sheet open={isOpen} onOpenChange={closeCreateModal}>
       <SheetContent className="bg-slate-200 min-w-[40vw] overflow-y-auto">
         <SheetHeader className="border-b-[1px] border-b-slate-300 pb-2">
-          <SheetTitle className="text-black/80">
-            Create a New Order
-          </SheetTitle>
+          <SheetTitle className="text-black/80">Create a New Order</SheetTitle>
         </SheetHeader>
         <form className="grid gap-4 py-4" onSubmit={formik.handleSubmit}>
           <div className="flex flex-col items-center gap-y-1.5">
@@ -117,11 +149,12 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
             />
-            {formik.touched.stripeSessionId && formik.errors.stripeSessionId && (
-              <div className="col-span-4 my-0 text-center text-red-600 text-sm">
-                {formik.errors.stripeSessionId}
-              </div>
-            )}
+            {formik.touched.stripeSessionId &&
+              formik.errors.stripeSessionId && (
+                <div className="col-span-4 my-0 text-center text-red-600 text-sm">
+                  {formik.errors.stripeSessionId}
+                </div>
+              )}
           </div>
           <div className="flex flex-col items-center gap-y-1.5">
             <Label htmlFor="user" className="block w-11/12">
@@ -133,42 +166,16 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               id="user"
               placeholder="Select a user with email"
               className="w-11/12 h-10 "
-              styles={{
-                option: (base, state) => ({
-                  ...base,
-                  border: `1px solid gray `,
-                  height: "100%",
-                  backgroundColor: state.isSelected
-                    ? "#9CA3AF"
-                    : base.backgroundColor,
-                  "&:hover": {
-                    backgroundColor: "gray",
-                  },
-                }),
-                control: (base, state) => ({
-                  ...base,
-                  backgroundColor: "#D1D5DB",
-                  border: state.isFocused
-                    ? "1px solid #D97706"
-                    : "1px solid #9CA3AF",
-                  width: "100%",
-                  boxShadow: "none",
-                  "&:hover": {
-                    border: state.isFocused
-                      ? "1px solid #D97706"
-                      : "1px solid #D97706",
-                  },
-                }),
-              }}
+              styles={selectFieldStyle}
               options={userOptions}
               value={userOptions?.find(
                 //stores boolean value
                 (option) => option.userId === formik.values.userId
               )}
               onChange={(selectedUser) => {
-                formik.setFieldValue("userId", selectedUser.userId); 
-                formik.setFieldValue("userEmail", selectedUser.userEmail); 
-                formik.setFieldValue("userName", selectedUser.userName); 
+                formik.setFieldValue("userId", selectedUser.userId);
+                formik.setFieldValue("userEmail", selectedUser.userEmail);
+                formik.setFieldValue("userName", selectedUser.userName);
               }}
               onBlur={() => {
                 formik.setFieldTouched("userId", true);
@@ -190,33 +197,7 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               id="status"
               placeholder="Select an order's status"
               className="w-11/12 h-10 "
-              styles={{
-                option: (base, state) => ({
-                  ...base,
-                  border: `1px solid gray `,
-                  height: "100%",
-                  backgroundColor: state.isSelected
-                    ? "#9CA3AF"
-                    : base.backgroundColor,
-                  "&:hover": {
-                    backgroundColor: "gray",
-                  },
-                }),
-                control: (base, state) => ({
-                  ...base,
-                  backgroundColor: "#D1D5DB",
-                  border: state.isFocused
-                    ? "1px solid #D97706"
-                    : "1px solid #9CA3AF",
-                  width: "100%",
-                  boxShadow: "none",
-                  "&:hover": {
-                    border: state.isFocused
-                      ? "1px solid #D97706"
-                      : "1px solid #D97706",
-                  },
-                }),
-              }}
+              styles={selectFieldStyle}
               options={statusOptions}
               value={statusOptions?.find(
                 //stores boolean value
@@ -235,57 +216,102 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               </div>
             )}
           </div>
-          <div className="flex flex-col items-center gap-y-1.5">
-            <Label htmlFor="orders" className=" w-11/12 flex justify-between items-end">
-              <p>Orders</p>
-              <span onClick={() => setOrderSelects(p => p+1)} className="cursor-pointer"><FaSquarePlus className="text-2xl" /></span>
-            </Label>
-                <Select
-                name="orders"
-                type="text"
-                id="orders"
-                placeholder="Select orders"
-                className="w-11/12 h-10 "
-                styles={{
-                  option: (base, state) => ({
-                    ...base,
-                    border: `1px solid gray `,
-                    height: "100%",
-                    backgroundColor: state.isSelected
-                      ? "#9CA3AF"
-                      : base.backgroundColor,
-                    "&:hover": {
-                      backgroundColor: "gray",
-                    },
-                  }),
-                  control: (base, state) => ({
-                    ...base,
-                    backgroundColor: "#D1D5DB",
-                    border: state.isFocused
-                      ? "1px solid #D97706"
-                      : "1px solid #9CA3AF",
-                    width: "100%",
-                    boxShadow: "none",
-                    "&:hover": {
-                      border: state.isFocused
-                        ? "1px solid #D97706"
-                        : "1px solid #D97706",
-                    },
-                  }),
-                }}
-                options={orderOptions}
-                value={orderOptions?.find(
-                  (option) => option.value === formik.values.status
-                )}
-                onChange={(selectedOrder) => {
-                  setTemp(selectedOrder.value)
-                }}
-                onBlur={() => {
-                  formik.setFieldTouched("orders", true);
-                }}
-              />
+          <div className="flex flex-col gap-y-1.5 w-11/12 mx-auto">
+            <div className="flex gap-x-6 ">
+              <Label
+                htmlFor="orders"
+                className="flex-[5] flex justify-between items-end"
+              >
+                <p>Orders</p>
+                <div className="flex gap-x-1">
+                  {orderSelectsLength > 1 && (
+                    <span
+                      onClick={() => {
+                        setOrderTempPlacement((prev) => prev.slice(0, -1));
+                        setOrderSelectsLength((prev) => prev - 1);
+                      }}
+                      className="cursor-pointer"
+                    >
+                      <FaMinusSquare className="text-2xl" />
+                    </span>
+                  )}
+                  <span
+                    onClick={() => setOrderSelectsLength((p) => p + 1)}
+                    className="cursor-pointer"
+                  >
+                    <FaSquarePlus className="text-2xl" />
+                  </span>
+                </div>
+              </Label>
 
- 
+              <Label
+                htmlFor="productQuantity"
+                className="flex-1 flex items-end"
+              >
+                Quantity
+              </Label>
+            </div>
+
+            {Array.from({ length: orderSelectsLength }).map((_, i) => (
+              <div key={i} className="flex gap-x-6">
+                <Select
+                  name="orders"
+                  type="text"
+                  id="orders"
+                  placeholder="Select orders"
+                  className="flex-[5]"
+                  styles={selectFieldStyle}
+                  options={orderOptions}
+                  value={orderOptions?.find(
+                    (option) => option.value === orderTempPlacement[i]
+                  )}
+                  onChange={(selectedOrder) => {
+                    setOrderTempPlacement((prev) => {
+                      const newOrderTempPlacement = [...prev];
+                      const checkIfAlreadyExists = newOrderTempPlacement.some(
+                        (enteredOrder) => {
+                          return enteredOrder?._id === selectedOrder.value._id
+                        }
+                      );
+                      console.log('result this: ', checkIfAlreadyExists)
+                      if (checkIfAlreadyExists) {
+                        toast.error("Product is already selected");
+                      } else {
+                        newOrderTempPlacement[i] = selectedOrder.value;
+                      }
+                      return newOrderTempPlacement;
+                    });
+                  }}
+                  onBlur={() => {
+                    formik.setFieldTouched("orders", true);
+                  }}
+                />
+                <div className="flex-1 ">
+                  <input
+                    name="orders"
+                    type="number"
+                    id="productQuantity"
+                    className={fieldStyleClass}
+                    value={orderTempPlacement[i]?.quantity || 1}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value, 10);
+                      setOrderTempPlacement((prev) => {
+                        const newOrderTempPlacement = prev.map((order, index) => {
+                          if (index === i) {
+                            return {
+                              ...order,
+                              quantity: value || 1,
+                            };
+                          }
+                          return order;
+                        });
+                        return newOrderTempPlacement;
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
 
             {formik.touched.orders && formik.errors.orders && (
               <div className="col-span-4 text-center text-red-600 text-sm">
@@ -294,11 +320,13 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
             )}
           </div>
 
-          <ImageUpload formik={formik} />
-
           <div className="flex justify-center py-4 items-center md:justify-end gap-x-2">
-            <Button type="submit" variant="primary">
-              Save changes
+            <Button
+              type="submit"
+              disabled={orderIsSubmitting}
+              variant="primary"
+            >
+              Save
             </Button>
             <div
               className="border border-input bg-background rounded-[5px] hover:bg-orange-600 hover:text-white duration-200 px-4 py-2 flex items-center cursor-pointer text-sm"

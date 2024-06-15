@@ -53,10 +53,10 @@ const PaymentForm = () => {
 
       const payload = {
         userId: userId,
-        orders: products,
-        stripeSessionId: result.data.id,
         userEmail: userEmail,
         userName: userName,
+        orders: products,
+        stripeSessionId: result.data.id,
       }
       const createOrderResult = await createOrder(payload);
       if (createOrderResult.success) {
