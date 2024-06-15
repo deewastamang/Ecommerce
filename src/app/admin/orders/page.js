@@ -31,6 +31,7 @@ import { dateFormatter } from "@/helper";
 import { Badge } from "@/components/ui/badge";
 
 import DataTable from "@/components/adminComponents/orders/OrdersDataTable";
+import UpdateOrderModal from "@/components/adminComponents/orders/UpdateOrderModal";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -51,13 +52,19 @@ const AdminOrdersPage = () => {
     error: ordersByUserError,
     refetch: ordersByUserRefetch,
   } = useGetOrdersByUserForAdminQuery();
-
   const [orderMode, setOrderMode] = useState("user");
+  const [selectedRow, setSelectedRow] = useState({});
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   useEffect(() => {
     ordersByProductRefetch();
     ordersByUserRefetch();
   }, [ordersByUserRefetch, ordersByProductRefetch]);
+
+  const handleEditRowClick = (orderData) => {
+    setSelectedRow(orderData);
+    setEditModalOpen(true);
+  };
 
   const columnsForProductMode = [
     {
@@ -588,6 +595,13 @@ const AdminOrdersPage = () => {
   }
   return (
     <div>
+      <UpdateOrderModal
+        isOpen={editModalOpen}
+        selectedRow={selectedRow}
+        closeEditModal={() => setEditModalOpen(false)}
+        refetch={ordersByUserRefetch}
+      />
+
       <div className="text-center text-sm mt-2">
         View Mode:{" "}
         <span

@@ -17,11 +17,19 @@ export const orderForAdminSlice = createApi({
       query: () => "/users",
       keepUnusedDataFor: 0,
     }),
+    updateOrderData: builder.mutation({
+      query: ({_id, ...updatedOrderData}) => ({
+        url: `/orders/${_id}`,
+        method: "PUT",
+        body: updatedOrderData,
+      })
+    })
   }),
 });
 
 export const {
   useGetOrdersByProductForAdminQuery,
   useGetOrdersByUserForAdminQuery,
-  useGetAllUsersQuery
+  useGetAllUsersQuery,
+  useUpdateOrderDataMutation,
 } = orderForAdminSlice;
