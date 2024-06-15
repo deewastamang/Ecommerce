@@ -83,22 +83,23 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
     // validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
-        // setSubmitting(true);
+        setSubmitting(true);
         values.orders = orderTempPlacement.filter(
           (order) =>
             order !== undefined &&
             Object.keys(order).length !== 0 &&
             Object.keys(order).includes("_id")
         );
-        // const res = await createOrder(values);
-        // if (res.data.success) {
-        //   toast.success(`Order is added successfully`);
-        //   refetch();
-        //   closeCreateModal();
-        //   resetForm();
-        // } else {
-        //   throw new Error("Post method failed");
-        // }
+        const res = await createOrder(values);
+        if (res.data.success) {
+          toast.success(`Order is added successfully`);
+          refetch();
+          closeCreateModal();
+          resetForm();
+          setOrderTempPlacement([{}]);
+        } else {
+          throw new Error("Post method failed");
+        }
         console.log("order values are: ", values);
       } catch (error) {
         console.error("Failed to create product: ", error.message);
@@ -165,7 +166,7 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               User
             </Label>
             <Select
-              name="userId"
+              name="userId"  
               type="text"
               id="user"
               placeholder="Select a user with email"
@@ -173,8 +174,8 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
               styles={selectFieldStyle}
               options={userOptions}
               value={userOptions?.find(
-                (option) => option.userId === formik.values.userId
-              ) || ""}
+                (option) => option.userId === formik.values?.userId  //will return the user
+              ) || {}}
               onChange={(selectedUser) => {
                 formik.setFieldValue("userId", selectedUser.userId);
                 formik.setFieldValue("userEmail", selectedUser.userEmail);
@@ -254,7 +255,7 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
             {orderTempPlacement.map((order, i) => (
               <div key={i} className="flex gap-x-6">
                 <Select
-                  name="orders"
+                  name="ordersForThisUser"
                   type="text"
                   id="orders"
                   placeholder="Select orders"
@@ -290,23 +291,24 @@ const CreateOrderModal = ({ refetch, isOpen, closeCreateModal }) => {
                     type="number"
                     id="productQuantity"
                     className={fieldStyleClass}
-                    value={orderTempPlacement[i].quantity || ""}
+                    value={order.quantity || ""}
+                    min="1"
                     onChange={(e) => {
                       const value = parseInt(e.target.value, 10);
-                      setOrderTempPlacement((prev) => {
-                        const newOrderTempPlacement = prev.map(
-                          (order, index) => {
-                            if (index === i) {
-                              return {
-                                ...order,
-                                quantity: value,
-                              };
+                        setOrderTempPlacement((prev) => {
+                          const newOrderTempPlacement = prev.map(
+                            (order, index) => {
+                              if (index === i) {
+                                return {
+                                  ...order,
+                                  quantity: value,
+                                };
+                              }
+                              return order;
                             }
-                            return order;
-                          }
-                        );
-                        return newOrderTempPlacement;
-                      });
+                          );
+                          return newOrderTempPlacement;
+                        });
                     }}
                   />
                 </div>
