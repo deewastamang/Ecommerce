@@ -25,7 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import CreateOrderModal from "./CreateOrderModal";
-import BulkDeleteProductsModal from "../products/BulkDeleteProductsModal";
+import BulkDeleteOrderDataModal from "./BulkDeleteOrderDataModal";
 
 export default function DataTable({ columns, data, refetch, mode }) {
   const [sorting, setSorting] = React.useState([]);
@@ -82,7 +82,7 @@ export default function DataTable({ columns, data, refetch, mode }) {
         closeCreateModal={() => setIsCreateModalOpen(false)}
         refetch={refetch}
       />
-      <BulkDeleteProductsModal
+      <BulkDeleteOrderDataModal
         isOpen={isBulkDeleteModalOpen}
         closeDeleteModal={() => setIsBulkDeleteModalOpen(false)}
         refetch={refetch}

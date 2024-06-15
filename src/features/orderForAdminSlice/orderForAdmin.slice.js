@@ -30,6 +30,13 @@ export const orderForAdminSlice = createApi({
         method: "DELETE",
       })
     }),
+    bulkDeleteOrderData: builder.mutation({
+      query:(orderDataIds) => ({
+        url: "/orders",
+        method: "DELETE",
+        body: orderDataIds,
+      })
+    })
   }),
 });
 
@@ -38,5 +45,6 @@ export const {
   useGetOrdersByUserForAdminQuery,
   useGetAllUsersQuery,
   useUpdateOrderDataMutation,
-  useDeleteSingleOrderDataMutation
+  useDeleteSingleOrderDataMutation,
+  useBulkDeleteOrderDataMutation,
 } = orderForAdminSlice;

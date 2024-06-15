@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { UserOrderModel } from "@/lib/models/userOrderModel";
 import { connectToDb } from "@/lib/dbConnection";
 
+//returns all order data from database
 export const GET = async () => {
   try {
     await connectToDb();
