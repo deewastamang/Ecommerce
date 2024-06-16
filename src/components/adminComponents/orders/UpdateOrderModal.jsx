@@ -137,7 +137,7 @@ const UpdateOrderModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={closeEditModal}>
-      <DialogContent className="sm:max-w-[675px] max-w-[350px] bg-white">
+      <DialogContent className="sm:max-w-[675px] max-w-[350px] bg-white h-[80dvh] overflow-x-auto">
         <DialogHeader>
           <DialogTitle>Edit Order</DialogTitle>
           <DialogDescription>

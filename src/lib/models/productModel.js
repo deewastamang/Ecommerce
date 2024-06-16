@@ -35,6 +35,10 @@ export const productSchema = new mongoose.Schema({
     },
     stock: {
         type: Number,
+    },
+    featured: {
+        type: Boolean,
+        default: false,
     }
 }, {timestamps: true})
 
