@@ -1,13 +1,13 @@
 
 import Banner from "@/components/banner/Banner";
-import Products from "@/components/products/Products";
+import FeaturedProductsHomePage from "@/components/products/FeaturedProductsHomePage";
 
 export default function Home() {
   return (
     <main className="">
       <div className="relative">
         <Banner />
-        <Products />
+        <FeaturedProductsHomePage />
       </div>
     </main>
   );

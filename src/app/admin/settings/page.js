@@ -11,6 +11,7 @@ import { IoPricetagOutline } from "react-icons/io5";
 import { TbCategory } from "react-icons/tb";
 import { IoStorefrontOutline } from "react-icons/io5";
 import { MdOutlineDateRange } from "react-icons/md";
+import { useUpdateProductMutation } from "@/features/productSlice/product.slice";
 
 import {
   DropdownMenu,
@@ -28,15 +29,34 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 import DataTable from "@/components/adminComponents/settings/ProductsDataTable";
 
 const AdminSettingsPage = () => {
   const { data: products, error, isLoading, refetch } = useGetProductsQuery();
+  const [updateProduct, { isLoading: isUpdating, isSuccess }] = useUpdateProductMutation();
 
   useEffect(() => {
     refetch();
   },[refetch])
+
+  const handleUpdateFeature = async (product) => {
+    try {
+      const updatedProduct = {...product, featured: !product.featured};
+      const res = await updateProduct(updatedProduct);
+      if(res.data.success) {
+        toast.success(`${updatedProduct.title} is now ${updatedProduct.featured? "featured" : "unfeatured"}`)
+      } else {
+        throw new Error("Put method failed")
+      }
+    } catch (error) {
+      console.error("Failed to update the feature status of product: ", error.message);
+    } finally {
+      refetch();
+    }
+  }
+
   const columns = [
     {
       id: "select",
@@ -205,11 +225,11 @@ const AdminSettingsPage = () => {
           <>
             <Badge variant="adminTable">
               {featured === true ? (
-                <span className="text-pink-600">Featured</span>
+                <span className="text-green-600">Featured</span>
               ) : featured === false? (
-                <span className="text-blue-600">Not Featured</span>
+                <span className="text-red-600">Not Featured</span>
               ) : (
-                <span className="text-orange-600">{featured || "N/A"}</span>
+                <span className="text-blue-600">{featured || "N/A"}</span>
               )}
             </Badge>
           </>
@@ -230,7 +250,7 @@ const AdminSettingsPage = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-white rounded">
-              <DropdownMenuItem className={singleRowData.featured ? "text-red-600" : "text-green-600"}>{singleRowData.featured ? "UnFeature": "Feature"}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleUpdateFeature(singleRowData)} className={singleRowData.featured ? "text-red-600" : "text-green-600"}>{singleRowData.featured ? "UnFeature": "Feature"}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

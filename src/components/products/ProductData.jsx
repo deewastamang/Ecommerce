@@ -27,8 +27,8 @@ const ProductData = ({ product }) => {
         y: 0,
         transition: {
           type: "spring",
-          duration: 3,
-          bounce: 0.3,
+          duration: 1,
+          // bounce: 0.1,
         },
         opacity: 1,
       });

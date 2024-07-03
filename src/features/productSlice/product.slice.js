@@ -15,6 +15,10 @@ export const productSlice = createApi({
       query: (_id) => `/products/${_id}`,
       keepUnusedDataFor: 0,
     }),
+    getFeaturedProducts: builder.query({
+      query: () => "/featuredProducts",
+      keepUnusedDataFor: 0,
+    }),
     createProduct: builder.mutation({
       query: (newProduct) => ({
         url: "/products",
@@ -48,6 +52,7 @@ export const productSlice = createApi({
 export const {
   useGetProductsQuery,
   useGetSingleProductQuery,
+  useGetFeaturedProductsQuery,
   useCreateProductMutation,
   useDeleteSingleProductMutation,
   useUpdateProductMutation,

@@ -78,6 +78,7 @@ const Banner = () => {
     arrows: true,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    pauseOnHover: false,
   };
 
   return (
