@@ -23,8 +23,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import CreateOrderModal from "./CreateOrderModal";
-import BulkDeleteOrderDataModal from "./BulkDeleteOrderDataModal";
+import CreateOrderModal from "./orders/CreateOrderModal";
+import BulkDeleteOrderDataModal from "./orders/BulkDeleteOrderDataModal";
 
 export default function DataTable({ columns, data, refetch, mode }) {
   const [sorting, setSorting] = React.useState([]);
