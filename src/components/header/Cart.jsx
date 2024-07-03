@@ -19,7 +19,7 @@ const CartButton = () => {
     dispatch(submitTotalPrice(amount))
     dispatch(submitTotalQuantity(quantity))
 
-  },[products])
+  },[products, dispatch])
   return (
     <>
     <CartIcon className="text-xl hidden md:inline" />

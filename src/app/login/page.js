@@ -182,7 +182,7 @@ const Login = () => {
                     {loading ? "loading" : "Login"}
                   </button>
                   <p className="text-sm text-center">
-                    Don't have an account?{" "}
+                    {"Don't have an account? "}
                     <Link href="/signup" className="font-medium underline">
                       Sign Up
                     </Link>

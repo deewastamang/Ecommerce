@@ -39,7 +39,7 @@ const ProductData = ({ product }) => {
         opacity: 0,
       });
     }
-  }, [inView]);
+  }, [inView, animation]);
 
   const starArray = Array.from({ length: product.rating }, (_, index) => (
     <span key={index} className="text-yellow-400">

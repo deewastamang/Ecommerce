@@ -9,7 +9,7 @@ import { FaTasks } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import LabelIcon from "./LabelIcon";
 
-const header = () => {
+const Header = () => {
   const pathname = usePathname();
 
   const adminLinks = [
@@ -69,4 +69,4 @@ const header = () => {
   );
 };
 
-export default header;
+export default Header;

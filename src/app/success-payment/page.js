@@ -12,7 +12,7 @@ const SuccessPage = () => {
   const router = useRouter();
   useEffect(() => {
     dispatch(resetCart());
-  },[]);
+  },[dispatch]);
   return (
     <Container className="flex items-center justify-center py-20">
       <Confetti />

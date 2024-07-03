@@ -141,7 +141,7 @@ const UpdateOrderModal = ({
         <DialogHeader>
           <DialogTitle>Edit Order</DialogTitle>
           <DialogDescription>
-            Make changes to the order of a user here. Click save when you're
+            Make changes to the order of a user here. Click save when you are
             done.
           </DialogDescription>
         </DialogHeader>

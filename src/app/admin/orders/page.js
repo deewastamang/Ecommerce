@@ -316,7 +316,7 @@ const AdminOrdersPage = () => {
             className="flex gap-x-1"
           >
             <IoKeyOutline />
-            User's ID
+            {'User\'s ID'} 
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -354,7 +354,7 @@ const AdminOrdersPage = () => {
             className="flex gap-x-1"
           >
             <MdOutlineSubtitles className="text-lg" />
-            User's Email
+            {'User\'s Email'} 
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );

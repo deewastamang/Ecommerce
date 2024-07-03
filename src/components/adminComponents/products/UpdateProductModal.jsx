@@ -80,7 +80,7 @@ const UpdateProductModal = ({
         <DialogHeader>
           <DialogTitle>Edit product</DialogTitle>
           <DialogDescription>
-            Make changes to your product here. Click save when you're done.
+            Make changes to your product here. Click save when you are done.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={formik.handleSubmit} className="grid gap-4 py-4">
