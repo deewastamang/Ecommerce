@@ -5,10 +5,10 @@ export const orderSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api" }),
   endpoints: (builder) => ({
     // with serach query
-      getOrders: builder.query({
-        query: (searchParams) => `/orders/?userId=${searchParams.userId}`,
-        keepUnusedDataFor: 0,
-      }),
+    getOrders: builder.query({
+      query: (searchParams) => `/orders/?userId=${searchParams.userId}`,
+      keepUnusedDataFor: 0,
+    }),
     createOrder: builder.mutation({
       query: (newOrders) => ({
         url: "/orders",
@@ -28,7 +28,7 @@ export const orderSlice = createApi({
       }),
     }),
     removeWish: builder.mutation({
-      query: ({userId, wishId}) => ({
+      query: ({ userId, wishId }) => ({
         url: `/wishlist/?userId=${userId}&wishId=${wishId}`,
         method: "DELETE",
       }),
@@ -36,4 +36,10 @@ export const orderSlice = createApi({
   }),
 });
 
-export const { useGetOrdersQuery, useCreateOrderMutation, useGetWishlistQuery, useAddWishMutation, useRemoveWishMutation } = orderSlice;
+export const {
+  useGetOrdersQuery,
+  useCreateOrderMutation,
+  useGetWishlistQuery,
+  useAddWishMutation,
+  useRemoveWishMutation,
+} = orderSlice;

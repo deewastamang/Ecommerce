@@ -18,10 +18,23 @@ export const authSlice = createApi({
         body: credentials,
       }),
     }),
+    getSingleUser: builder.query({
+      query: (_id) => `/users/${_id}`,
+      keepUnusedDataFor: 0,
+    }),
+    updateUser: builder.mutation({
+      query: ({_id, ...newUserData}) => ({
+        url: `/users/${_id}`,
+        method: "PUT",
+        body: newUserData,
+      })
+    })
   }),
 });
 
 export const {
   useSignupMutation,
   useLoginMutation,
+  useGetSingleUserQuery,
+  useUpdateUserMutation,
 } = authSlice;

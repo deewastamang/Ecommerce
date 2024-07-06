@@ -5,6 +5,8 @@ import FormattedPrice from "../products/FormattedPrice";
 import { useSession } from "next-auth/react";
 import { loadStripe } from "@stripe/stripe-js";
 import { useCreateOrderMutation } from "@/features/orderSlice/order.slice";
+import { calculateDeliveryFee } from "@/helper/deliveryFee";
+import { useState } from "react";
 
 const PaymentForm = () => {
   const { data: session } = useSession();
@@ -13,6 +15,12 @@ const PaymentForm = () => {
   const { products, totalPrice, userInfo } = useSelector(
     (state) => state?.shopping
   );
+  const [shippingFee, setShippingFee] = useState(null);
+
+  const storeLocation = {latitude: 27.72734759207572, longitude: 85.3044330602845};
+
+  calculateDeliveryFee(session?.user?.userId, storeLocation).then(res => setShippingFee(res));
+  
 
   //==========stripe payment starts here=====================
   const stripePromise = loadStripe(
@@ -82,7 +90,7 @@ const PaymentForm = () => {
         <div className="max-w-lg flex items-center justify-between">
           <p className="uppercase font-medium">Shipping</p>
           <p>
-            <FormattedPrice amount={200} />
+            <FormattedPrice amount={shippingFee} />
           </p>
         </div>
       </div>
@@ -90,7 +98,7 @@ const PaymentForm = () => {
         <div className="max-w-lg flex items-center justify-between">
           <p className="uppercase font-medium">Total Price</p>
           <p>
-            <FormattedPrice amount={totalPrice + 200} />
+            <FormattedPrice amount={totalPrice + shippingFee} />
           </p>
         </div>
       </div>
