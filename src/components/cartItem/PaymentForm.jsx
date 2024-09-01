@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { loadStripe } from "@stripe/stripe-js";
 import { useCreateOrderMutation } from "@/features/orderSlice/order.slice";
 import { calculateDeliveryFee } from "@/helper/deliveryFee";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PaymentForm = () => {
   const { data: session } = useSession();
@@ -20,6 +20,7 @@ const PaymentForm = () => {
   const storeLocation = {latitude: 27.72734759207572, longitude: 85.3044330602845};
 
   calculateDeliveryFee(session?.user?.userId, storeLocation).then(res => setShippingFee(res));
+  console.log("the delivery free ", shippingFee);
   
 
   //==========stripe payment starts here=====================

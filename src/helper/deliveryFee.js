@@ -5,7 +5,7 @@ export const calculateDeliveryFee = async (userId, storeLocation) => {
     const res = await fetch(`api/users/${userId}`);
     if(!res.ok) {
         console.error("something went wrong");
-        return
+        return null;
     }
     const data = await res.json();
     const userLocation = {latitude: data?.data?.location?.latitude, longitude: data?.data?.location?.longitude};
@@ -25,8 +25,6 @@ export const calculateDeliveryFee = async (userId, storeLocation) => {
         }
       }
     return null;
-
-
   } catch (error) {
     console.error("Error fetching user data:", error);
     throw error;
