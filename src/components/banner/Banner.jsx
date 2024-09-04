@@ -58,10 +58,10 @@ const Banner = () => {
     },
     {
       image: zeroTwoImage,
-      title: "Sassy awesomeness",
-      alt: "fourht baner image",
+      title: "Cool Outfit",
+      alt: "fourth banner image",
       description:
-        "Main charater from an anime darling of the franxx. Get an awesome and stunning outfit collection",
+        "Get an awesome and stunning outfit collection",
       firstButtonLink: "http://localhost:3000/about",
       secondButtonLink: "http://localhost:3000/shop",
     },
