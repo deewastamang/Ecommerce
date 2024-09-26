@@ -465,7 +465,7 @@ const AdminOrdersPage = () => {
                 <TooltipTrigger>
                   <Badge variant="adminTable">
                     <ImFilesEmpty className="mr-2" />
-                    {stripeId.substring(0, 5)}...
+                    {stripeId?.substring(0, 5)}...
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent className="w-60 bg-white rounded">
