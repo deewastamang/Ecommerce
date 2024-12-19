@@ -32,6 +32,9 @@ const PaymentForm = () => {
       if(!session) {
         return toast.error("Please log in first")
       }
+      if(shippingFee === null) {
+        return toast.error("Please set your location first")
+      }
       const stripe = await stripePromise;
       const userEmail = session?.user?.email;
       const userId = session?.user?.userId;
@@ -51,6 +54,7 @@ const PaymentForm = () => {
             ],
           })),
           email: userEmail,
+          shippingFee: shippingFee,
         }),
       });
 

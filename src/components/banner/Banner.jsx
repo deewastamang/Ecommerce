@@ -35,7 +35,7 @@ const Banner = () => {
       alt: "iamge of new collection",
       description:
         "Grab out latest and limited edition collection this summer for the most elegant and classy look",
-      firstButtonLink: "http://localhost:3000/about",
+      firstButtonLink: "http://localhost:3000/products",
       secondButtonLink: "http://localhost:3000/shop",
     },
     {
@@ -44,7 +44,7 @@ const Banner = () => {
       alt: "time for summer",
       description:
         "Discover our exclusive summer collection, designed to elevate your style with timeless elegance and sophistication.",
-      firstButtonLink: "http://localhost:3000/about",
+      firstButtonLink: "http://localhost:3000/products",
       secondButtonLink: "http://localhost:3000/shop",
     },
     {
@@ -53,7 +53,7 @@ const Banner = () => {
       alt: "third baner image",
       description:
         "Elevate your summer wardrobe with our newest limited edition pieces, crafted for an effortlessly chic and refined look.",
-      firstButtonLink: "http://localhost:3000/about",
+      firstButtonLink: "http://localhost:3000/products",
       secondButtonLink: "http://localhost:3000/shop",
     },
     {
@@ -62,7 +62,7 @@ const Banner = () => {
       alt: "fourht baner image",
       description:
         "Main charater from an anime darling of the franxx. Get an awesome and stunning outfit collection",
-      firstButtonLink: "http://localhost:3000/about",
+      firstButtonLink: "http://localhost:3000/products",
       secondButtonLink: "http://localhost:3000/shop",
     },
   ];

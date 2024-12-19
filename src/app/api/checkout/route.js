@@ -6,12 +6,12 @@ export const POST = async (req) => {
 
   try {
     const reqBody = await req.json();
-    const { items, email } = await reqBody;
+    const { items, email, shippingFee } = await reqBody;
 
     const extractingItems = await items.map((item) => ({
       quantity: item.quantity,
       price_data: {
-        currency: "usd",
+        currency: "npr",
         unit_amount: item.price * 100,
         product_data: {
           name: item.title,
@@ -20,6 +20,20 @@ export const POST = async (req) => {
         },
       },
     }));
+
+    // Adding the shipping fee as a separate line item
+    if (shippingFee) {
+      extractingItems.push({
+        quantity: 1,
+        price_data: {
+          currency: "npr",
+          unit_amount: shippingFee * 100, // Convert to the smallest currency unit (cents)
+          product_data: {
+            name: "Shipping Fee",
+          },
+        },
+      });
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
